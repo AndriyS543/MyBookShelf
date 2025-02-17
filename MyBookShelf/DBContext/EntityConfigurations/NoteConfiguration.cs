@@ -10,9 +10,10 @@ namespace MyBookShelf.DBContext.EntityConfigurations
         {
             builder.HasKey(n => n.IdNote);
             builder.Property(n => n.Text).HasMaxLength(700).IsRequired();
-            builder.HasOne<ReadingSession>()
-                   .WithMany()
-                   .HasForeignKey(n => n.IdReadingSession);
+            builder.HasOne(n => n.ReadingSession) 
+                    .WithMany(rs => rs.Notes)
+                    .HasForeignKey(n => n.IdReadingSession) 
+                    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

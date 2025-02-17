@@ -14,10 +14,10 @@ namespace MyBookShelf.DBContext.EntityConfigurations
             builder.Property(rs => rs.StartPage).IsRequired();
             builder.Property(rs => rs.FinishPage).IsRequired();
             builder.Property(rs => rs.FinishPercent);
-            builder.HasOne<Book>()
-                   .WithMany()
-                   .HasForeignKey(rs => rs.IdBook);
-
+            builder.HasOne(rs => rs.Book)
+                        .WithMany(b => b.ReadingSessions)
+                        .HasForeignKey(rs => rs.IdBook)
+                        .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

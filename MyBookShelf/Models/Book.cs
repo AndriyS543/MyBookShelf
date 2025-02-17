@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyBookShelf.Models
+﻿namespace MyBookShelf.Models
 {
     public class Book
     {
@@ -19,5 +13,9 @@ namespace MyBookShelf.Models
         public int CountPages { get; set; }
 
         public Shelf Shelf { get; set; }
+
+        public List<ReadingSession> ReadingSessions { get; set; }
+
+        public List<BookGenre> BookGenres { get; set; }
     }
 }

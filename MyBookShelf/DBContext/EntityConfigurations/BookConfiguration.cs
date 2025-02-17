@@ -16,13 +16,10 @@ namespace MyBookShelf.DBContext.EntityConfigurations
             builder.Property(b => b.Description).HasMaxLength(700);
             builder.Property(b => b.Author).HasMaxLength(50);
             builder.Property(b => b.CountPages);
-            builder.HasOne<Shelf>()
-                   .WithMany()
-                   .HasForeignKey(b => b.IdShelf);
-
-            builder.ToTable(t => t.HasCheckConstraint("CK_Book_Rating", "[Rating] BETWEEN 1 AND 5"));
+            builder.HasOne(b => b.Shelf)
+                        .WithMany(s => s.Books)
+                        .HasForeignKey(b => b.IdShelf)
+                        .OnDelete(DeleteBehavior.NoAction);
         }
-
-
     }
 }

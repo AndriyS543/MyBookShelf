@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyBookShelf.Models
+﻿namespace MyBookShelf.Models
 {
     public class ReadingSession
     {
@@ -15,8 +9,8 @@ namespace MyBookShelf.Models
         public int FinishPage { get; set; }
         public int FinishPercent { get; set; }
         public int IdBook { get; set; }
-
         public Book Book { get; set; }
+        public List<Note> Notes { get; set; }
     }
 
 }
