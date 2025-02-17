@@ -13,7 +13,7 @@ namespace MyBookShelf.Models
         public DateTime PublicationDate { get; set; }
         public string PathImg { get; set; }
         public int IdShelf { get; set; }
-        public decimal Rating { get; set; }
+        public int Rating { get; set; }
         public string Description { get; set; }
         public string Author { get; set; }
         public int CountPages { get; set; }
