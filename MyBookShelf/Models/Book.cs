@@ -17,6 +17,7 @@ namespace MyBookShelf.Models
         public string Description { get; set; }
         public string Author { get; set; }
         public int CountPages { get; set; }
- 
+
+        public Shelf Shelf { get; set; }
     }
 }
