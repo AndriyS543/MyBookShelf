@@ -1,0 +1,47 @@
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.cache
+*.sln.docstates
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.tlog
+*.VC.db
+
+# Конфігураційні файли
+appsettings*.json
+secrets.json
+
+# Файли логів
+*.log
+logs/
+*.tlog
+
+# Файли публікації
+publish/
+wwwroot/
+
+# Файли пакетів
+node_modules/
+packages/
+*.nupkg
+project.lock.json
+
+# Конфіденційні файли
+.env
+*.key
+*.pfx
+*.cer
+
+# Системні файли
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
