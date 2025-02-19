@@ -20,5 +20,14 @@ namespace MyBookShelf
         {
             InitializeComponent();
         }
+        private void CloseApp_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+        private void MinimizeApp_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
     }
 }

@@ -32,12 +32,12 @@ namespace MyBookShelf
 
         protected async override void OnStartup(StartupEventArgs e)
         {
-            using (BookShelfDBContext dbContext = _bookShelfDbContextFactory.CreateDbContext())
+           /* using (BookShelfDBContext dbContext = _bookShelfDbContextFactory.CreateDbContext())
             {
 
                 dbContext.Database.Migrate();
 
-            }
+            }*/
 
             MainWindow = new MainWindow();
             MainWindow.Show();

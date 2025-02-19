@@ -9,6 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\img_books.png" />
+    <None Remove="Images\img_close.png" />
+    <None Remove="Images\img_minimize.png" />
+    <None Remove="Images\img_reading.png" />
+    <None Remove="Images\img_shelves.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Services\" />
   </ItemGroup>
 
@@ -19,6 +27,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\img_books.png" />
+    <Resource Include="Images\img_close.png" />
+    <Resource Include="Images\img_minimize.png" />
+    <Resource Include="Images\img_reading.png" />
+    <Resource Include="Images\img_shelves.png" />
   </ItemGroup>
 
 </Project>

@@ -4,9 +4,84 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyBookShelf"
+         xmlns:Menu="clr-namespace:MyBookShelf.Utilities"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="645" Width="1280"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        Background="Transparent">
     <Grid>
+        <!--// Window Border //-->
+        <Border Background="#3D2012"
+            CornerRadius="20"/>
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="240" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Navigation Panel -->
+            <Border CornerRadius="20" Background="#705448" 
+                    Width="200" Height="597" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Left"
+                    Margin="20">
+                <StackPanel Orientation="Vertical">
+                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="True">
+                        <Grid>
+                            <Image Source="Images/img_books.png" Style="{StaticResource Image_Style}" />
+                            <TextBlock Text="Books" Style="{StaticResource Text_Style}" />
+                        </Grid>
+                    </Menu:Btn>
+
+                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="False">
+                        <Grid>
+                            <Image Source="Images/img_shelves.png" Style="{StaticResource Image_Style}" />
+                            <TextBlock Text="Shelves" Style="{StaticResource Text_Style}" />
+                        </Grid>
+                    </Menu:Btn>
+
+                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="False">
+                        <Grid>
+                            <Image Source="Images/img_reading.png" Style="{StaticResource Image_Style}" />
+                            <TextBlock Text="Reading" Style="{StaticResource Text_Style}" />
+                        </Grid>
+                    </Menu:Btn>
+                </StackPanel>
+            </Border>
+
+
+            <!-- Current Page -->
+            <Grid Grid.Row="0" Grid.Column="1"
+              VerticalAlignment="Bottom"
+              HorizontalAlignment="Center"
+              Height="617"
+              Width="991">
+                <ContentControl x:Name="Pages"
+                            Content="{Binding CurrentView}" />
+            </Grid>
+        </Grid>
+        
+        <Grid VerticalAlignment="Top" HorizontalAlignment="Right">
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{StaticResource ExitApp}" Click="MinimizeApp_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/img_minimize.png" Width="22" Height="22" VerticalAlignment="Bottom"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource ExitApp}" Click="CloseApp_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/img_close.png" Width="16" Height="16" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
 
     </Grid>
+
+
 </Window>
