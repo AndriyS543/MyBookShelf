@@ -7,6 +7,7 @@ using MyBookShelf.Repositories.BookGenreRroviders;
 using MyBookShelf.Repositories.NoteProviders;
 using MyBookShelf.Repositories.ReadingSessionProviders;
 using MyBookShelf.Repositories.ShelfProviders;
+using MyBookShelf.ViewModel;
 namespace MyBookShelf
 {
     public partial class App : Application
@@ -39,7 +40,11 @@ namespace MyBookShelf
 
             }*/
 
-            MainWindow = new MainWindow();
+            var navigationViewModel = new NavigationViewModel();
+            MainWindow = new MainWindow 
+            {
+               DataContext = navigationViewModel
+            };
             MainWindow.Show();
             base.OnStartup(e);
         }

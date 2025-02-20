@@ -29,21 +29,24 @@
                     HorizontalAlignment="Left"
                     Margin="20">
                 <StackPanel Orientation="Vertical">
-                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="True">
+                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="True"
+                              Command="{Binding BooksCommand}">
                         <Grid>
                             <Image Source="Images/img_books.png" Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Books" Style="{StaticResource Text_Style}" />
                         </Grid>
                     </Menu:Btn>
 
-                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="False">
+                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="False"
+                               Command="{Binding ShelvesCommand}">
                         <Grid>
                             <Image Source="Images/img_shelves.png" Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Shelves" Style="{StaticResource Text_Style}" />
                         </Grid>
                     </Menu:Btn>
 
-                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="False">
+                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="False"
+                              Command="{Binding ReadingCommand}">
                         <Grid>
                             <Image Source="Images/img_reading.png" Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Reading" Style="{StaticResource Text_Style}" />
