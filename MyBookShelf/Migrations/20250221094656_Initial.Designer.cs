@@ -12,8 +12,8 @@ using MyBookShelf.DBContext;
 namespace MyBookShelf.Migrations
 {
     [DbContext(typeof(BookShelfDBContext))]
-    [Migration("20250217191311_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250221094656_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -109,6 +109,9 @@ namespace MyBookShelf.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.HasKey("IdGenre");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Genres");
                 });

@@ -107,6 +107,9 @@ namespace MyBookShelf.Migrations
 
                     b.HasKey("IdGenre");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Genres");
                 });
 

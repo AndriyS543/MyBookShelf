@@ -8,7 +8,7 @@ namespace MyBookShelf.DBContext
         public BookShelfDBContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<BookShelfDBContext>();
-            optionsBuilder.UseSqlServer("connection");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-JLUU10E;Database=BookShelfDB6;Trusted_Connection=True;TrustServerCertificate=True;");
             return new BookShelfDBContext(optionsBuilder.Options);
         }
     }

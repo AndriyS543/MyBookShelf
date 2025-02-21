@@ -13,7 +13,8 @@ namespace MyBookShelf.DBContext.EntityConfigurations
             builder.HasOne(n => n.ReadingSession) 
                     .WithMany(rs => rs.Notes)
                     .HasForeignKey(n => n.IdReadingSession) 
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
         }
     }
 }
