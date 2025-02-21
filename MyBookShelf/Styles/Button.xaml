@@ -88,4 +88,79 @@
         </Setter>
     </Style>
 
+
+    <Style x:Key="BookButtonStyle" TargetType="Button">
+        <Setter Property="Width" Value="124"/>
+        <Setter Property="Height" Value="184"/>
+        <Setter Property="BorderBrush" Value="White"/>
+        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="Background" Value="#705448"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="Foreground" Value="#C7B1A7"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="10">
+                        <!-- Закруглені кути -->
+                        <ContentPresenter HorizontalAlignment="Center" 
+                                     VerticalAlignment="Center"
+                                     Content="{TemplateBinding Content}"
+                                     ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ShelfButton"
+    TargetType="{x:Type Button}">
+
+        <Setter Property="Height"
+         Value="44" />
+        <Setter Property="Width"
+         Value="256" />
+        <Setter Property="HorizontalAlignment"
+         Value="Right" />
+        <Setter Property="VerticalAlignment"
+         Value="Top" />
+        <Setter Property="Margin"
+         Value="2,0,0,0" />
+        <Setter Property="Background" Value="#C7B1A7" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontFamily" Value="Josefin Sans"/>
+        <Setter Property="Foreground" Value="#3D2012" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" 
+                     BorderBrush="{TemplateBinding BorderBrush}" 
+                     BorderThickness="1" 
+                     CornerRadius="10">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" TargetName="border" Value="White" />
+                            <Setter Property="BorderThickness" TargetName="border" Value="2"/>
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="border" Value="#705448"/>
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

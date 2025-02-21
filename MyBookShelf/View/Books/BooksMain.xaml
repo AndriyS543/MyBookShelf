@@ -4,9 +4,57 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             d:DesignHeight="600"
-             d:DesignWidth="850">
+             d:DesignHeight="617"
+             d:DesignWidth="991">
 
     <Grid>
+         <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    
+    <!-- ComboBox зверху -->
+        <ComboBox ItemsSource="{Binding Shelves}" 
+          SelectedItem="{Binding SelectedShelf}"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Top"
+          Margin="10" 
+          Style="{StaticResource ComboBoxShelvesStyle}" 
+          SelectedIndex="0">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
+            <ItemsControl ItemsSource="{Binding FilteredBooks}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel HorizontalAlignment="Left" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="5,10,5,10" HorizontalAlignment="Center">
+                            <Button Style="{StaticResource BookButtonStyle}"
+                                Command="{Binding DataContext.TemplateClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                CommandParameter="{Binding}"
+                                Content="{Binding Title}"/>
+
+                            <TextBlock Style="{StaticResource BookTextStyle}"
+                                   Text="{Binding Title}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+
     </Grid>
+
 </UserControl>
