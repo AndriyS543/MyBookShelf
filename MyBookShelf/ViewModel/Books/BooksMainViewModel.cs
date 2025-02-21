@@ -1,18 +1,27 @@
 ﻿using Learning_Words.Utilities;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using MyBookShelf.Models;
+using MyBookShelf.Repositories.BookGenreRroviders;
+using MyBookShelf.Repositories.BookRroviders;
+using MyBookShelf.Repositories.GenreRroviders;
+using MyBookShelf.Repositories.ShelfProviders;
+using MyBookShelf.Services;
+using MyBookShelf.View;
 namespace MyBookShelf.ViewModel
 {
     public class BooksMainViewModel : ViewModelBase
     {
-        public ObservableCollection<Shelf> Shelves { get; set; }
-        public ObservableCollection<Book> Books { get; set; }
-        public ObservableCollection<Book> FilteredBooks { get; set; }
+        private readonly IShelfProviders _shelfProvider;
+        private readonly IBookProviders _bookProviders;
+        private readonly IBookGenreProviders _bookGenreProviders;
+        private readonly IGenreProviders _genreProviders;
+        private readonly ICreator _creator;
+
+        public ObservableCollection<Shelf> Shelves { get; set; } = new ObservableCollection<Shelf>();
+        public ObservableCollection<Book> Books { get; set; } = new ObservableCollection<Book>();
+        public ObservableCollection<Book> FilteredBooks { get; set; } = new ObservableCollection<Book>();
 
         private Shelf _selectedShelf;
         public Shelf SelectedShelf
@@ -24,8 +33,7 @@ namespace MyBookShelf.ViewModel
                 {
                     _selectedShelf = value;
                     OnPropertyChanged();
-
-                    if (Books != null)
+                    if (SelectedShelf != null)
                     {
                         LoadBooks();
                     }
@@ -33,83 +41,104 @@ namespace MyBookShelf.ViewModel
             }
         }
 
-
         public ICommand TemplateClickCommand { get; set; }
-        public ICommand AddBookCommand { get; set; }
 
-        public BooksMainViewModel()
+        public BooksMainViewModel(ICreator creator, IShelfProviders shelfProviders, IBookProviders bookProviders, IBookGenreProviders bookGenreProviders, IGenreProviders genreProviders)
         {
-            Shelves = new ObservableCollection<Shelf>
-                    {
-                        new Shelf { IdShelf = -1, Name = "My book shelf" },
-                        new Shelf { IdShelf = 2, Name = "Shelf one" },
-                        new Shelf { IdShelf = 3, Name = "Shelf two" },
-                        new Shelf { IdShelf = 4, Name = "Shelf three" },
-                        new Shelf { IdShelf = 5, Name = "Shelf four" }
-                    };
+            _creator = creator;
+            _shelfProvider = shelfProviders;
+            _bookProviders = bookProviders;
+            _bookGenreProviders = bookGenreProviders;
+            _genreProviders = genreProviders;
 
-            Books = new ObservableCollection<Book>
-                    {
-                        new Book { IdBook = 1, Title = "Harry Potter", Author = "J.K. Rowling", PathImg = "Images/harry_potter.jpg", Rating = 5, IdShelf = 2 },
-                        new Book { IdBook = 2, Title = "The Hobbit", Author = "J.R.R. Tolkien", PathImg = "Images/the_hobbit.jpg", Rating = 4, IdShelf = 3 },
-                        new Book { IdBook = 3, Title = "1984", Author = "George Orwell", PathImg = "Images/1984.jpg", Rating = 5, IdShelf = 3 }, new Book { IdBook = 1, Title = "Harry Potter", Author = "J.K. Rowling", PathImg = "Images/harry_potter.jpg", Rating = 5, IdShelf = 2 },
-                        new Book { IdBook = 2, Title = "The Hobbit", Author = "J.R.R. Tolkien", PathImg = "Images/the_hobbit.jpg", Rating = 4, IdShelf = 3 },
-                        new Book { IdBook = 3, Title = "1984", Author = "George Orwell", PathImg = "Images/1984.jpg", Rating = 5, IdShelf = 3 }, new Book { IdBook = 1, Title = "Harry Potter", Author = "J.K. Rowling", PathImg = "Images/harry_potter.jpg", Rating = 5, IdShelf = 2 },
-                        new Book { IdBook = 2, Title = "The Hobbit", Author = "J.R.R. Tolkien", PathImg = "Images/the_hobbit.jpg", Rating = 4, IdShelf = 3 },
-                        new Book { IdBook = 3, Title = "1984", Author = "George Orwell", PathImg = "Images/1984.jpg", Rating = 5, IdShelf = 3 }, new Book { IdBook = 1, Title = "Harry Potter", Author = "J.K. Rowling", PathImg = "Images/harry_potter.jpg", Rating = 5, IdShelf = 2 },
-                        new Book { IdBook = 2, Title = "The Hobbit", Author = "J.R.R. Tolkien", PathImg = "Images/the_hobbit.jpg", Rating = 4, IdShelf = 3 },
-                        new Book { IdBook = 3, Title = "1984", Author = "George Orwell", PathImg = "Images/1984.jpg", Rating = 5, IdShelf = 3 }, new Book { IdBook = 1, Title = "Harry Potter", Author = "J.K. Rowling", PathImg = "Images/harry_potter.jpg", Rating = 5, IdShelf = 2 },
-                        new Book { IdBook = 2, Title = "The Hobbit", Author = "J.R.R. Tolkien", PathImg = "Images/the_hobbit.jpg", Rating = 4, IdShelf = 3 },
-                        new Book { IdBook = 3, Title = "1984", Author = "George Orwell", PathImg = "Images/1984.jpg", Rating = 5, IdShelf = 3 }
-                    };
+            TemplateClickCommand = new RelayCommand(param => OnBookClicked(param));
 
-            FilteredBooks = new ObservableCollection<Book>(Books);
+            InitializeAsync();
+        }
 
+        private async void InitializeAsync()
+        {
+            Shelves.Clear();
+
+
+            var shelves = await _shelfProvider.GetAllAsync();
+            var allBooks = shelves.SelectMany(s => s.Books).ToList();
+            Shelves.Add(new Shelf { Name = "My Book Shelf", IdShelf = -1, Books = allBooks });
+            foreach (var shelf in shelves)
+            {
+                Shelves.Add(shelf);
+            }
             SelectedShelf = Shelves[0];
 
-            TemplateClickCommand = new RelayCommand(param =>
+            Books.Clear();
+            var books = await _bookProviders.GetAllAsync();
+            foreach (var book in books)
             {
-                if (param is Book book)
-                {
-                    MessageBox.Show($"Clicked on {book.Title}");
-                }
-            });
-
-            AddBookCommand = new RelayCommand(OpenAddBookWindow);
+                Books.Add(book);
+            }
+            FilterBooks();
         }
+
+
 
         private void LoadBooks()
         {
-            if (FilteredBooks == null)
-                FilteredBooks = new ObservableCollection<Book>();
-
-            FilteredBooks.Clear();
-
-            if (SelectedShelf.IdShelf == -1)
-            {
-                foreach (var book in Books)
-                {
-                    FilteredBooks.Add(book);
-                }
-            }
-            else
-            {
-                foreach (var book in Books.Where(b => b.IdShelf == SelectedShelf.IdShelf))
-                {
-                    FilteredBooks.Add(book);
-                }
-                FilteredBooks.Add(new Book { Title = "+", IdShelf = SelectedShelf.IdShelf });
-            }
-           
+            FilterBooks();
         }
 
-
-        private void OpenAddBookWindow(object p)
+        private void FilterBooks()
         {
-          
+            try
+            {
+                FilteredBooks.Clear();
+
+                if (SelectedShelf?.IdShelf == -1)
+                {
+                    foreach (var book in Books)
+                    {
+                        FilteredBooks.Add(book);
+                    }
+                }
+                else
+                {
+                    foreach (var book in Books.Where(b => b.IdShelf == SelectedShelf.IdShelf))
+                    {
+                        FilteredBooks.Add(book);
+                    }
+                    FilteredBooks.Add(new Book { Title = "+", IdShelf = SelectedShelf.IdShelf });
+                }
+            }
+            catch (Exception ex) { }
         }
 
-        
+        private async void OnBookClicked(object param)
+        {
+            try
+            {
+                if (param is Book book)
+                {
+                    if (book.IdShelf == -1 || book.Title == "+")
+                    {
+                        var viewModel = new AddNewBookViewModel(SelectedShelf, _creator, _bookProviders, _bookGenreProviders, _genreProviders);
+                        var addBookWindow = new AddNewBook
+                        {
+                            DataContext = viewModel,
+                            Owner = Application.Current.MainWindow
+                        };
+                        addBookWindow.ShowDialog();
+                        InitializeAsync();
+
+ 
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Clicked on {book.Title}");
+                    }
+                }
+            }
+            catch (Exception ex) { }
+        }
+
 
     }
 

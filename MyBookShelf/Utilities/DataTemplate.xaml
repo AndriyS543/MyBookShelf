@@ -14,4 +14,8 @@
     <DataTemplate DataType="{x:Type vm:ReadingMainViewModel}">
         <view:ReadingMain />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:AddNewBookViewModel}">
+        <view:AddNewBook />
+    </DataTemplate>
 </ResourceDictionary>

@@ -32,7 +32,7 @@ namespace MyBookShelf
             _noteProviders = new DatabaseNoteProviders(_bookShelfDbContextFactory);
             _readingSessionProvider = new DatabaseReadingSessionProviders(_bookShelfDbContextFactory);
             _shelfProvider = new DatabaseShelfProviders(_bookShelfDbContextFactory);
-            _creator = new Creator(_shelfProvider);
+            _creator = new Creator(_shelfProvider,_bookProviders);
         }
 
         protected async override void OnStartup(StartupEventArgs e)
@@ -44,7 +44,7 @@ namespace MyBookShelf
 
             }
 
-            var navigationViewModel = new NavigationViewModel(_creator,_shelfProvider);
+            var navigationViewModel = new NavigationViewModel(_creator,_shelfProvider,_bookProviders,_bookGenreProviders,_genreProviders);
             MainWindow = new MainWindow 
             {
                DataContext = navigationViewModel

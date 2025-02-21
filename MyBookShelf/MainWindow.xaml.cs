@@ -22,7 +22,7 @@ namespace MyBookShelf
         }
         private void CloseApp_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            Application.Current.Shutdown();
         }
         private void MinimizeApp_Click(object sender, RoutedEventArgs e)
         {
