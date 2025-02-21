@@ -34,9 +34,12 @@ namespace MyBookShelf.Repositories.ShelfProviders
         {
             using (var context = _dbContextFactory.CreateDbContext())
             {
-                return await context.Shelves.ToListAsync();
+                return await context.Shelves
+                    .Include(s => s.Books)  
+                    .ToListAsync();
             }
         }
+
 
         public async Task<Shelf> GetByIdAsync(int id)
         {

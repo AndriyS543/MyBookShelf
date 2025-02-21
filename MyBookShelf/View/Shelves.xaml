@@ -47,21 +47,30 @@
                 <StackPanel Grid.Column="0" >
 
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Title:" Style="{StaticResource TextShelvesMainStyle}"/>
-                        <TextBox Style="{StaticResource ShelfTextBoxStyle}" Padding="0,14,0,0" />
+                        <TextBlock Text="Name:" Style="{StaticResource TextShelvesMainStyle}"/>
+                        <TextBox Style="{StaticResource ShelfTextBoxStyle}" Padding="0,14,0,0"  Text="{Binding tbShelfName, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
                         <TextBlock Text="Count of books:" Style="{StaticResource TextShelvesMainStyle}"/>
-                        <TextBlock Style="{StaticResource TextShelvesSecondStyle}"/>
+                        <TextBlock Style="{StaticResource TextShelvesSecondStyle}" Text="{Binding tbCountBooks}"/>
                     </StackPanel>
 
                 </StackPanel>
 
                 <!-- Right Side (Buttons) -->
                 <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right">
-                    <Button Content="Add new shelf" Style="{StaticResource ShelfButton}"/>
-                    <Button Content="Delete shelf" Style="{StaticResource ShelfButton}" Margin="0,44,0,0"/>
+                    <Button Content="Add new shelf" Style="{StaticResource ShelfButton}" Command="{Binding AddNewShelfCommand}"/>
+                    <Button Content="Delete shelf"
+                            Style="{StaticResource ShelfButton}"
+                            Margin="0,44,0,0"
+                            Command="{Binding DeleteShelfCommand}"
+                            Visibility="{Binding IsDeleteShelfButton, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0,44,0,0"
+                        Visibility="{Binding IsDeleteShelf, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Button Content="✔️" Width="102" Height="44" Style="{StaticResource ShelfButton}" Margin="2,0,50,0" Command="{Binding YesDeleteShelfCommand}"/>
+                        <Button Content="✖️" Width="102" Height="44" Style="{StaticResource ShelfButton}" Command="{Binding NoDeleteShelfCommand}"/>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Border>
@@ -71,20 +80,22 @@
             <StackPanel>
                 <TextBlock Text="Desctiption" Style="{StaticResource TextShelvesMainStyle}"/>
                 <TextBox Style="{StaticResource ShelfTextBoxStyle}" 
+                         Text="{Binding tbShelfDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Margin="0"
                          Width="Auto"
                          Height="267.5"
                          Padding="0,10,0,0"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"
-                         VerticalScrollBarVisibility="Hidden" />
+                         VerticalScrollBarVisibility="Hidden"/>
             </StackPanel>
         </Border>
 
         <!-- Buttons -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,0">
-            <Button Content="✔️" Width="102" Height="44" Style="{StaticResource ShelfButton}" Margin="0,0,24,0"/>
-            <Button Content="✖️" Width="102" Height="44" Style="{StaticResource ShelfButton}"/>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,0"
+                    Visibility="{Binding IsShelfContentChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Button Content="✔️" Width="102" Height="44" Style="{StaticResource ShelfButton}" Margin="0,0,24,0" Command="{Binding CommitChangesShelfCommand}"/>
+            <Button Content="✖️" Width="102" Height="44" Style="{StaticResource ShelfButton}" Command="{Binding CancelChangesShelfCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>
