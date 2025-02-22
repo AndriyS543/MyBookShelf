@@ -43,8 +43,16 @@
                         <StackPanel Margin="5,10,5,10" HorizontalAlignment="Center">
                             <Button Style="{StaticResource BookButtonStyle}"
                                 Command="{Binding DataContext.TemplateClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                CommandParameter="{Binding}"
-                                Content="{Binding Title}"/>
+                                CommandParameter="{Binding}">
+                                
+                                <Button.Background>
+                                    <ImageBrush ImageSource="{Binding PathImg, Converter={StaticResource NullToImageConverter}}"  Stretch="UniformToFill"/>
+                                </Button.Background>
+
+                                <TextBlock Text="{Binding Title}" FontSize="18" Width="120" Height="200" Background="#705448" Foreground="#C7B1A7" TextAlignment="Center" Padding="0 80 0 0"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                    Visibility="{Binding PathImg, Converter={StaticResource NullToVisibilityConverter}}"/>
+                            </Button>
 
                             <TextBlock Style="{StaticResource BookTextStyle}"
                                    Text="{Binding Title}"/>

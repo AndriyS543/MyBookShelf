@@ -11,7 +11,7 @@ namespace MyBookShelf.DBContext.EntityConfigurations
             builder.HasKey(b => b.IdBook);
             builder.Property(b => b.Title).HasMaxLength(255).IsRequired();
             builder.Property(b => b.PublicationDate).IsRequired();
-            builder.Property(b => b.PathImg).HasMaxLength(255).IsRequired();
+            builder.Property(b => b.PathImg).HasMaxLength(255).IsRequired(false);
             builder.Property(b => b.Rating).HasDefaultValue(null);
             builder.Property(b => b.Description).HasMaxLength(700);
             builder.Property(b => b.Author).HasMaxLength(50).IsRequired();

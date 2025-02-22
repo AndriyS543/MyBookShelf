@@ -14,12 +14,21 @@
     
     <Grid>
         <Border Background="#705448"  CornerRadius="20">
-        <!-- Основний вміст -->
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <!-- Зображення книги (кнопка додавання) -->
-            <Button Style="{StaticResource BookButtonStyle}" Background="#C7B1A7" Foreground="#705448" FontSize="60" Content="+" />
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Button  Style="{StaticResource BookButtonStyle}"
+                         Command="{Binding SelectImageCommand}">
+                    <Button.Background>
+                        <ImageBrush ImageSource="{Binding SelectedImagePath, Converter={StaticResource NullToImageConverter}}" Stretch="UniformToFill"/>
+                    </Button.Background>
+                    
+                    <TextBlock TextAlignment="Center" Padding="40" Background="#C7B1A7" Foreground="#705448" FontSize="60" Width="120" Height="200" Text="+"
+                     Visibility="{Binding SelectedImagePath, Converter={StaticResource NullToVisibilityConverter}}"/>
+               
+                </Button>
 
-            <StackPanel Orientation="Vertical" Margin="25,0,0,0">
+
+
+                <StackPanel Orientation="Vertical" Margin="25,0,0,0">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Title:" Style="{StaticResource TextShelvesMainStyle}" Foreground="#B0C2DB"/>
                     <TextBox  Style="{StaticResource ShelfTextBoxStyle}" 
