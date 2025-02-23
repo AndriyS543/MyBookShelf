@@ -24,36 +24,60 @@
 
             <!-- Navigation Panel -->
             <Border CornerRadius="20" Background="#705448" 
-                    Width="200" Height="597" 
-                    VerticalAlignment="Center" 
-                    HorizontalAlignment="Left"
-                    Margin="20">
-                <StackPanel Orientation="Vertical">
-                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="True"
-                              Command="{Binding BooksCommand}">
-                        <Grid>
-                            <Image Source="Images/img_books.png" Style="{StaticResource Image_Style}" />
-                            <TextBlock Text="Books" Style="{StaticResource Text_Style}" />
-                        </Grid>
-                    </Menu:Btn>
+        Width="200" Height="597" 
+        VerticalAlignment="Center" 
+        HorizontalAlignment="Left"
+        Margin="20">
 
-                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="False"
-                               Command="{Binding ShelvesCommand}">
-                        <Grid>
-                            <Image Source="Images/img_shelves.png" Style="{StaticResource Image_Style}" />
-                            <TextBlock Text="Shelves" Style="{StaticResource Text_Style}" />
-                        </Grid>
-                    </Menu:Btn>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="False"
-                              Command="{Binding ReadingCommand}">
-                        <Grid>
-                            <Image Source="Images/img_reading.png" Style="{StaticResource Image_Style}" />
-                            <TextBlock Text="Reading" Style="{StaticResource Text_Style}" />
-                        </Grid>
-                    </Menu:Btn>
-                </StackPanel>
+                    <!-- Верхні кнопки -->
+                    <StackPanel Orientation="Vertical" Grid.Row="0">
+                        <Menu:Btn Style="{StaticResource BtnStyle}" 
+                                  IsChecked="{Binding IsBooksChecked, Mode=OneWay}"
+                                  Command="{Binding BooksCommand}">
+                            <Grid>
+                                <Image Source="Images/img_books.png" Style="{StaticResource Image_Style}" />
+                                <TextBlock Text="Books" Style="{StaticResource Text_Style}" />
+                            </Grid>
+                        </Menu:Btn>
+
+                        <Menu:Btn Style="{StaticResource BtnStyle}" 
+                                  IsChecked="{Binding IsShelvesChecked, Mode=OneWay}"
+                                  Command="{Binding ShelvesCommand}">
+                            <Grid>
+                                <Image Source="Images/img_shelves.png" Style="{StaticResource Image_Style}" />
+                                <TextBlock Text="Shelves" Style="{StaticResource Text_Style}" />
+                            </Grid>
+                        </Menu:Btn>
+
+                        <Menu:Btn Style="{StaticResource BtnStyle}" 
+                                  IsChecked="{Binding IsReadingChecked, Mode=OneWay}"
+                                  Command="{Binding ReadingCommand}">
+                            <Grid>
+                                <Image Source="Images/img_reading.png" Style="{StaticResource Image_Style}" />
+                                <TextBlock Text="Reading" Style="{StaticResource Text_Style}" />
+                            </Grid>
+                        </Menu:Btn>
+                    </StackPanel>
+
+                   
+                    <StackPanel Grid.Row="1"/>
+
+
+                    <Button Grid.Row="2" 
+                            Command="{Binding GoBackCommand}"
+                            Visibility="{Binding CanGoBack, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Content="pack://application:,,,/Images/img_back.png"
+                            Style="{StaticResource BackButtonStyle}"/>
+                </Grid>
             </Border>
+
 
 
             <!-- Current Page -->

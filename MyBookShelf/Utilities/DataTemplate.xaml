@@ -18,4 +18,8 @@
     <DataTemplate DataType="{x:Type vm:AddNewBookViewModel}">
         <view:AddNewBook />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:SelectedBookViewModel}">
+        <view:SelectedBook />
+    </DataTemplate>
 </ResourceDictionary>

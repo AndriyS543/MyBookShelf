@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\img_back.png" />
     <None Remove="Images\img_books.png" />
     <None Remove="Images\img_close.png" />
     <None Remove="Images\img_minimize.png" />
@@ -26,11 +27,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\img_back.png" />
     <Resource Include="Images\img_books.png" />
     <Resource Include="Images\img_close.png" />
     <Resource Include="Images\img_minimize.png" />
     <Resource Include="Images\img_reading.png" />
     <Resource Include="Images\img_shelves.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="View\Books\SelectedBook.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

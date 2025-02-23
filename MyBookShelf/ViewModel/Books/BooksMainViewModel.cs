@@ -18,6 +18,8 @@ namespace MyBookShelf.ViewModel
         private readonly IBookGenreProviders _bookGenreProviders;
         private readonly IGenreProviders _genreProviders;
         private readonly ICreator _creator;
+        private readonly NavigationViewModel _navigationViewModel;
+
 
         public ObservableCollection<Shelf> Shelves { get; set; } = new ObservableCollection<Shelf>();
         public ObservableCollection<Book> Books { get; set; } = new ObservableCollection<Book>();
@@ -43,7 +45,7 @@ namespace MyBookShelf.ViewModel
 
         public ICommand TemplateClickCommand { get; set; }
 
-        public BooksMainViewModel(ICreator creator, IShelfProviders shelfProviders, IBookProviders bookProviders, IBookGenreProviders bookGenreProviders, IGenreProviders genreProviders)
+        public BooksMainViewModel(NavigationViewModel navigationViewModel, ICreator creator, IShelfProviders shelfProviders, IBookProviders bookProviders, IBookGenreProviders bookGenreProviders, IGenreProviders genreProviders)
         {
             _creator = creator;
             _shelfProvider = shelfProviders;
@@ -53,6 +55,7 @@ namespace MyBookShelf.ViewModel
 
             TemplateClickCommand = new RelayCommand(param => OnBookClicked(param));
 
+            _navigationViewModel = navigationViewModel;
             InitializeAsync();
         }
 
@@ -132,7 +135,7 @@ namespace MyBookShelf.ViewModel
                     }
                     else
                     {
-                        MessageBox.Show($"Clicked on {book.Title}");
+                        _navigationViewModel.OpenSelectedBookCommand.Execute(book.IdBook);
                     }
                 }
             }
