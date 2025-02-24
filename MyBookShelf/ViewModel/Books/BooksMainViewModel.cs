@@ -114,7 +114,7 @@ namespace MyBookShelf.ViewModel
             catch (Exception ex) { }
         }
 
-        private async void OnBookClicked(object param)
+        private void OnBookClicked(object param)
         {
             try
             {

@@ -8,7 +8,135 @@
              d:DesignWidth="991">
 
     <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button  Style="{StaticResource BookButtonStyle}"
+                             Height="270" 
+                             Width="182" 
+                             Command="{Binding SelectFb2FileCommand }">
+                        <Button.Background>
+                            <ImageBrush ImageSource="{Binding SelectedImagePath, Converter={StaticResource NullToImageConverter}}" Stretch="UniformToFill"/>
+                        </Button.Background>
+
+                        <TextBlock TextAlignment="Center" 
+                                   Padding="0 90 0 0" 
+                                   Background="#C7B1A7" 
+                                   Foreground="#705448" 
+                                   FontSize="60" 
+                                   Height="270" 
+                                   Width="182" 
+                                   Text="+"
+                                   Visibility="{Binding SelectedImagePath, Converter={StaticResource NullToVisibilityConverter}}"/>
+
+                    </Button>
+
+                    <!-- Інформація про книгу -->
+                    <StackPanel Grid.Column="1" Margin="10 0 0 0">
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,9">
+                            <TextBlock Text="Title:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
+                            <TextBox Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ShelfTextBoxStyle}" Padding="0,10,0,0"  VerticalAlignment="Center" Margin="11,3,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <TextBlock Text="Author:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
+                            <TextBox Text="{Binding Author, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ShelfTextBoxStyle}" Padding="0,10,0,0" VerticalAlignment="Center" Margin="11,3,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <TextBlock Text="Genre:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
+                            <TextBox Text="жанри" Style="{StaticResource ShelfTextBoxStyle}" VerticalAlignment="Center" Padding="0,10,0,0" Margin="11,3,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,17">
+                            <TextBlock Text="Page:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
+                            <TextBox Text="{Binding PageCountText, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, NotifyOnValidationError=True}" Style="{StaticResource ShelfTextBoxStyle}" Padding="0,10,0,0" VerticalAlignment="Center" Margin="11,3,0,0"/>
+                        </StackPanel>
+
+                        <!-- Рейтинг (5 кнопок) -->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Rating:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
+
+                            <Button Content="★" FontSize="16" Foreground="Gold" Width="30" Height="30" Background="Transparent"/>
+                            <Button Content="★" FontSize="16" Foreground="Gold" Width="30" Height="30" Background="Transparent"/>
+                            <Button Content="★" FontSize="16" Foreground="Gold" Width="30" Height="30" Background="Transparent"/>
+                            <Button Content="★" FontSize="16" Foreground="Gold" Width="30" Height="30" Background="Transparent"/>
+                            <Button Content="☆" FontSize="16" Foreground="Gold" Width="30" Height="30" Background="Transparent"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Кнопки редагування та видалення -->
+                    <StackPanel Grid.Column="2" 
+                            Orientation="Vertical" 
+                            HorizontalAlignment="Stretch" 
+                            VerticalAlignment="Center" 
+                            Margin="0,100,0,0">
+
+                        <Button Content="Delete"
+                                Style="{StaticResource ShelfButton}"
+                                Margin="0,44,0,0"
+                                Command="{Binding DeleteBookCommand}"
+                                Visibility="{Binding IsDeleteBookButton, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <StackPanel Orientation="Horizontal" 
+                                    HorizontalAlignment="Stretch" 
+                                    Margin="0,44,0,0"
+                                    Visibility="{Binding IsDeleteBook, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Button Content="✔️" Width="102" Height="44" Style="{StaticResource ShelfButton}" Margin="2,0,50,0" Command="{Binding YesDeleteBookCommand}"/>
+                            <Button Content="✖️" Width="102" Height="44" Style="{StaticResource ShelfButton}" Command="{Binding NoDeleteBookCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1">
+                <StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="3,12,0,6">
+                        <TextBlock Text="Description" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30" />
+                        <TextBox Style="{StaticResource ShelfTextBoxStyle}" 
+                         Text="{Binding ShelfDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0"
+                         Width="Auto"
+                         Height="101"
+                         Padding="0,5,0,0"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Hidden"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Margin="3 0 14 0">
+                        <TextBlock Text="Notes:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
+                        <TextBox Style="{StaticResource ShelfTextBoxStyle}" 
+                         Text="Notes!!!"
+                         Margin="0"
+                         Width="Auto"
+                         Height="64.35"
+                         Padding="0,5,0,0"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Hidden"
+                         IsReadOnly="True"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,32,0,0"
+                                Visibility="{Binding IsBookContentChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Button Content="✔️" Width="102" Height="44" Style="{StaticResource ShelfButton}" Margin="0,0,24,0" Command="{Binding CommitChangesBookCommand}"/>
+                        <Button Content="✖️" Width="102" Height="44" Style="{StaticResource ShelfButton}" Command="{Binding CancelChangesBookCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
 
     </Grid>
-
+ 
 </UserControl>

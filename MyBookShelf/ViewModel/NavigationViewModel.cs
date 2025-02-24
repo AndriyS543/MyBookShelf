@@ -91,11 +91,13 @@ namespace MyBookShelf.ViewModel
 
         public ICommand OpenSelectedBookCommand { get; }
 
+  
+
         private void OpenSelectedBook(object obj)
         {
             if (obj is int IdBook)
             {
-                CurrentView = new SelectedBookViewModel(IdBook, _bookProviders, _bookGenreProviders, _genreProviders);
+                CurrentView = new SelectedBookViewModel(IdBook,this, _bookProviders, _bookGenreProviders, _genreProviders);
             }
         }
 
@@ -126,9 +128,16 @@ namespace MyBookShelf.ViewModel
         private void GoBack(object obj)
         {
             if (_viewHistory.Count > 0)
-            {
-                _isGoingBack = true; 
-                CurrentView = _viewHistory.Pop(); 
+            {           
+                _isGoingBack = true;
+                CurrentView = _viewHistory.Pop();
+
+                // Fully reload the page when navigating back to BooksMainViewModel
+                if (CurrentView is BooksMainViewModel)
+                {
+                    CurrentView = new BooksMainViewModel(this, _creator, _shelfProvider, _bookProviders, _bookGenreProviders, _genreProviders);
+                }
+
                 _isGoingBack = false;
                 OnPropertyChanged(nameof(CanGoBack));
             }

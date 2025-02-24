@@ -10,7 +10,7 @@ namespace MyBookShelf.Utilities
 {
     public static class Fb2Parser
     {
-        public static async Task<(string bookTitle, string bookAuthor, string imagePath)> ParseFb2FileAsync(string fb2Path)
+        public static async Task<(string bookTitle, string bookAuthor, string bookDescription, string imagePath)> ParseFb2FileAsync(string fb2Path)
         {
             string imagesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images");
             if (!Directory.Exists(imagesFolder))
@@ -30,17 +30,19 @@ namespace MyBookShelf.Utilities
                 string bookAuthor = authorElement != null ?
                     ($"{authorElement.Element(ns + "first-name")?.Value} {authorElement.Element(ns + "last-name")?.Value}").Trim() : "Unknown Author";
 
+                string bookDescription = doc.Descendants(ns + "annotation").FirstOrDefault()?.Value ?? "No description available";
+
                 var coverElement = doc.Descendants(ns + "coverpage").FirstOrDefault();
-                if (coverElement == null) return (bookTitle, bookAuthor, "");
+                if (coverElement == null) return (bookTitle, bookAuthor, bookDescription, "");
 
                 var coverId = coverElement.Elements(ns + "image")
                                           .Attributes(link + "href")
                                           .FirstOrDefault()?.Value.TrimStart('#');
-                if (string.IsNullOrEmpty(coverId)) return (bookTitle, bookAuthor, "");
+                if (string.IsNullOrEmpty(coverId)) return (bookTitle, bookAuthor, bookDescription, "");
 
                 var binaryElement = doc.Descendants(ns + "binary")
                                        .FirstOrDefault(x => x.Attribute("id")?.Value == coverId);
-                if (binaryElement == null) return (bookTitle, bookAuthor, "");
+                if (binaryElement == null) return (bookTitle, bookAuthor, bookDescription, "");
 
                 string binaryData = binaryElement.Value.Replace("\n", "").Replace("\r", "");
                 byte[] imageBytes = Convert.FromBase64String(binaryData);
@@ -49,12 +51,13 @@ namespace MyBookShelf.Utilities
                 string destinationPath = Path.Combine(imagesFolder, newFileName);
                 await File.WriteAllBytesAsync(destinationPath, imageBytes);
 
-                return (bookTitle, bookAuthor, destinationPath);
+                return (bookTitle, bookAuthor, bookDescription, destinationPath);
             }
             catch (Exception)
             {
-                return ("Error", "Error", "");
+                return ("Error", "Error", "Error", "");
             }
         }
+
     }
 }

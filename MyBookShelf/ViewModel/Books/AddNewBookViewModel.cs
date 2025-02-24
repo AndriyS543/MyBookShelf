@@ -80,6 +80,7 @@ namespace MyBookShelf.ViewModel
         private readonly IGenreProviders _genreProviders;
         private readonly ICreator _creator;
 
+        private string BookDescription = "";
         public ICommand SelectImageCommand { get; }
         public ICommand AddBooksCommand { get; }
 
@@ -102,7 +103,7 @@ namespace MyBookShelf.ViewModel
                 Int32.Parse(_tbCountPage??"0"),
                 _shelf.IdShelf,
                 tbBookAuthor,
-                "Default Description",
+                BookDescription,
                  _selectedImagePath ?? null,
                  0);
 
@@ -138,16 +139,34 @@ namespace MyBookShelf.ViewModel
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Filter = "FB2 Files|*.fb2",
-                Title = "Select an FB2 File"
+                Filter = "FB2 Files|*.fb2|Image Files|*.png;*.jpg",
+                Title = "Select a File"
             };
 
             if (openFileDialog.ShowDialog() == true)
             {
                 var result = await Fb2Parser.ParseFb2FileAsync(openFileDialog.FileName);
-                tbBookTitle = result.bookTitle;
-                tbBookAuthor = result.bookAuthor;
-                SelectedImagePath = result.imagePath;
+                string extension = Path.GetExtension(openFileDialog.FileName).ToLower();
+                string imagesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images");
+                if (!Directory.Exists(imagesFolder))
+                {
+                    Directory.CreateDirectory(imagesFolder);
+                }
+                if (extension == ".fb2")
+                {
+                    tbBookTitle = result.bookTitle;
+                    tbBookAuthor = result.bookAuthor;
+                    BookDescription = result.bookDescription;
+                    SelectedImagePath = result.imagePath;
+                }
+                else if (extension == ".png" || extension == ".jpg")
+                {
+                    string newFileName = Guid.NewGuid().ToString() + extension;
+                    string destinationPath = Path.Combine(imagesFolder, newFileName);
+                    File.Copy(openFileDialog.FileName, destinationPath, true);
+                    SelectedImagePath = destinationPath;
+                }
+                
             }
         }
 
