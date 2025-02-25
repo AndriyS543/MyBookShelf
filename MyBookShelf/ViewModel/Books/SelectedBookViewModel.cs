@@ -114,6 +114,23 @@ namespace MyBookShelf.ViewModel
             set { _isDeleteBook = value; OnPropertyChanged(); }
         }
 
+        private int _selectedRating = -1;
+        public int SelectedRating
+        {
+            get => _selectedRating;
+            set
+            {
+                if (_selectedRating != value)
+                {
+                    _selectedRating = value;
+                    UpdateRatings(); 
+                    CheckBookContentChanged();
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public ObservableCollection<RatingItem> Ratings { get; } = new();
+
         public ICommand DeleteBookCommand { get; }
         public ICommand YesDeleteBookCommand { get; }
         public ICommand NoDeleteBookCommand { get; }
@@ -121,7 +138,7 @@ namespace MyBookShelf.ViewModel
         public ICommand CancelChangesBookCommand { get; }
 
         public ICommand SelectFb2FileCommand { get; }
-
+        public ICommand SetRatingCommand { get; }
         public SelectedBookViewModel(int bookId, NavigationViewModel navigationViewModel, IBookProviders bookProviders, IBookGenreProviders bookGenreProviders, IGenreProviders genreProviders)
         {
             _bookProviders = bookProviders;
@@ -135,10 +152,11 @@ namespace MyBookShelf.ViewModel
             CommitChangesBookCommand = new AsyncRelayCommand(CommitBookChangesAsync);
             CancelChangesBookCommand = new RelayCommand(CancelBookChanges);
             SelectFb2FileCommand = new AsyncRelayCommand(SelectFb2File);
-
-            LoadBookData(bookId);
+            SetRatingCommand = new RelayCommand(SetRating);          
+            
+           LoadBookData(bookId);
         }
-
+ 
         private async void LoadBookData(int bookId)
         {
             SelectedBook = await _bookProviders.GetByIdAsync(bookId);
@@ -149,6 +167,28 @@ namespace MyBookShelf.ViewModel
                 PageCountText = SelectedBook.CountPages.ToString();
                 SelectedImagePath = SelectedBook.PathImg;
                 ShelfDescription = SelectedBook.Description;
+                SelectedRating = SelectedBook.Rating ;
+            }
+        }
+        private void UpdateRatings()
+        {
+            Ratings.Clear();
+            for (int i = 1; i <= 5; i++)
+            {
+                Ratings.Add(new RatingItem
+                {
+                    Number = i,
+                    Value = i <= SelectedRating ? "★" : "☆"
+                });
+            }
+        }
+
+        private void SetRating(object rating)
+        {
+            if (rating is int newRating)
+            {
+                SelectedRating = newRating;
+                UpdateRatings();
             }
         }
 
@@ -188,6 +228,7 @@ namespace MyBookShelf.ViewModel
                 PageCountText = SelectedBook.CountPages.ToString();
                 SelectedImagePath = SelectedBook.PathImg;
                 ShelfDescription = SelectedBook.Description;
+                SelectedRating = SelectedBook.Rating;
             }
         }
 
@@ -195,7 +236,7 @@ namespace MyBookShelf.ViewModel
         {
             if (!string.IsNullOrWhiteSpace(Title) && SelectedBook != null)
             {
-                var updatedBook = new Book { IdBook = SelectedBook.IdBook, Title = Title, Author = Author, CountPages = _pageCount ?? 0, PathImg = SelectedImagePath, Description = ShelfDescription, IdShelf = SelectedBook.IdShelf };
+                var updatedBook = new Book { IdBook = SelectedBook.IdBook, Title = Title, Author = Author, CountPages = _pageCount ?? 0, PathImg = SelectedImagePath, Description = ShelfDescription,Rating= SelectedRating, IdShelf = SelectedBook.IdShelf };
                 await _bookProviders.UpdateAsync(updatedBook);
                 SelectedBook = updatedBook;
             }
@@ -210,7 +251,8 @@ namespace MyBookShelf.ViewModel
                 Author != SelectedBook.Author ||
                 PageCountText != SelectedBook.CountPages.ToString() ||
                 SelectedImagePath != SelectedBook.PathImg ||
-                ShelfDescription != SelectedBook.Description;
+                ShelfDescription != SelectedBook.Description||
+                SelectedRating != SelectedBook.Rating;
 
             OnPropertyChanged(nameof(IsBookContentChanged));
         }

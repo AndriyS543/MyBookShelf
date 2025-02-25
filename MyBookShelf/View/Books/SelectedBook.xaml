@@ -67,14 +67,29 @@
 
                         <!-- Рейтинг (5 кнопок) -->
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Rating:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
+                            <TextBlock Text="Rating:" FontSize="30" Style="{StaticResource TextSelectedBookMainStyle}"/>
 
-                            <Button Content="★" FontSize="16" Foreground="Gold" Width="30" Height="30" Background="Transparent"/>
-                            <Button Content="★" FontSize="16" Foreground="Gold" Width="30" Height="30" Background="Transparent"/>
-                            <Button Content="★" FontSize="16" Foreground="Gold" Width="30" Height="30" Background="Transparent"/>
-                            <Button Content="★" FontSize="16" Foreground="Gold" Width="30" Height="30" Background="Transparent"/>
-                            <Button Content="☆" FontSize="16" Foreground="Gold" Width="30" Height="30" Background="Transparent"/>
+                            <ItemsControl ItemsSource="{Binding Ratings}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Content="{Binding Value}" 
+                                                Style="{StaticResource RatingButtonStyle}"
+                                                Command="{Binding DataContext.SetRatingCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding Number}"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </StackPanel>
+
+
+
+
+
                     </StackPanel>
 
                     <!-- Кнопки редагування та видалення -->
