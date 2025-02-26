@@ -9,6 +9,7 @@ using MyBookShelf.Services;
 using MyBookShelf.Utilities;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Net;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
@@ -32,7 +33,7 @@ namespace MyBookShelf.ViewModel
                 }
             }
         }
-        public ObservableCollection<Genre> Genres { get; set; }
+        public ObservableCollection<SelectableGenre> Genres { get; set; }
         public ICommand SelectGenreCommand { get; }
 
         private string? _selectedImagePath;
@@ -83,6 +84,8 @@ namespace MyBookShelf.ViewModel
         private string BookDescription = "";
         public ICommand SelectImageCommand { get; }
         public ICommand AddBooksCommand { get; }
+        public ICommand ToggleGenreSelectionCommand { get; }
+
 
         public AddNewBookViewModel(Shelf shelf, ICreator creator, IBookProviders bookProviders, IBookGenreProviders bookGenreProviders, IGenreProviders genreProviders)
         {
@@ -94,19 +97,55 @@ namespace MyBookShelf.ViewModel
 
             AddBooksCommand = new AsyncRelayCommand(AddBooksAsync);
             SelectImageCommand = new RelayCommand(SelectFb2File);
+            ToggleGenreSelectionCommand = new RelayCommand(ToggleGenreSelection);
 
+            _ = LoadGenresAsync();
+        }
 
+        private async Task LoadGenresAsync()
+        {
+            var existingBookGenres = await _bookGenreProviders.GetAllAsync();
+
+            var genres = await _genreProviders.GetAllAsync();
+            // Перетворюємо список жанрів у SelectableGenre
+            Genres = new ObservableCollection<SelectableGenre>(
+                genres.Select(genre => new SelectableGenre(genre, existingBookGenres))
+            );
+            OnPropertyChanged(nameof(Genres)); // Оновлюємо прив’язку у UI
+        }
+
+        private void ToggleGenreSelection(object p)
+        {
+            if (p is SelectableGenre genre)
+            {
+                genre.IsSelected = !genre.IsSelected;
+                OnPropertyChanged();
+            }
         }
         private async Task AddBooksAsync()
         {
-            await _creator.CreateBookAsync(tbBookTitle,
+            var newBook = await _creator.CreateBookAsync(tbBookTitle,
                 Int32.Parse(_tbCountPage??"0"),
                 _shelf.IdShelf,
                 tbBookAuthor,
                 BookDescription,
                  _selectedImagePath ?? null,
                  0);
+            var bookId = newBook.IdBook;
+            if (bookId > 0)
+            {
+                // Отримуємо вибрані жанри
+                var selectedGenres = Genres.Where(g => g.IsSelected).Select(g => g.Genre.IdGenre);
 
+                foreach (var genreId in selectedGenres)
+                {
+                    await _bookGenreProviders.AddAsync(new BookGenre
+                    {
+                        IdBook = bookId,
+                        IdGenre = genreId
+                    });
+                }
+            }
         }
         private void SelectImage(object p)
         {
@@ -156,7 +195,10 @@ namespace MyBookShelf.ViewModel
                 {
                     tbBookTitle = result.bookTitle;
                     tbBookAuthor = result.bookAuthor;
-                    BookDescription = result.bookDescription;
+                    BookDescription = result.bookDescription?.Length > 700
+                        ? result.bookDescription.Substring(0, 700)
+                        : result.bookDescription;
+
                     SelectedImagePath = result.imagePath;
                 }
                 else if (extension == ".png" || extension == ".jpg")

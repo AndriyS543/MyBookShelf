@@ -9,6 +9,7 @@ using MyBookShelf.Repositories.ReadingSessionProviders;
 using MyBookShelf.Repositories.ShelfProviders;
 using MyBookShelf.ViewModel;
 using MyBookShelf.Services;
+using MyBookShelf.DatabaseInitializer;
 namespace MyBookShelf
 {
     public partial class App : Application
@@ -41,6 +42,7 @@ namespace MyBookShelf
             {
 
                 dbContext.Database.Migrate();
+                await DbInitializer.InitializeGenres(_genreProviders);
 
             }
 

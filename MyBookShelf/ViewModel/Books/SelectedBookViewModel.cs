@@ -1,17 +1,14 @@
 ﻿using Learning_Words.Utilities;
 using System.Collections.ObjectModel;
-using System.Windows;
 using System.Windows.Input;
 using MyBookShelf.Models;
 using MyBookShelf.Repositories.BookGenreRroviders;
 using MyBookShelf.Repositories.BookRroviders;
 using MyBookShelf.Repositories.GenreRroviders;
-using MyBookShelf.Repositories.ShelfProviders;
-using MyBookShelf.Services;
-using MyBookShelf.View;
 using Microsoft.Win32;
 using MyBookShelf.Utilities;
 using System.IO;
+using MyBookShelf.View;
 namespace MyBookShelf.ViewModel
 {
     public class SelectedBookViewModel : ViewModelBase
@@ -20,6 +17,7 @@ namespace MyBookShelf.ViewModel
         private readonly IBookGenreProviders _bookGenreProviders;
         private readonly IGenreProviders _genreProviders;
         private readonly NavigationViewModel _navigationViewModel;
+        private readonly int _bookID;
 
         private Book _selectedBook;
         public Book SelectedBook
@@ -33,7 +31,7 @@ namespace MyBookShelf.ViewModel
                 OnPropertyChanged(nameof(Author));
                 OnPropertyChanged(nameof(PageCountText));
                 OnPropertyChanged(nameof(SelectedImagePath));
-                OnPropertyChanged(nameof(ShelfDescription));
+                OnPropertyChanged(nameof(BookDescription));
                 CheckBookContentChanged();
             }
         }
@@ -43,7 +41,7 @@ namespace MyBookShelf.ViewModel
         private string _genre;
         private int? _pageCount;
         private string _selectedImagePath;
-        private string _shelfDescription;
+        private string _bookDescription;
 
         public string Title
         {
@@ -84,10 +82,10 @@ namespace MyBookShelf.ViewModel
             set { _selectedImagePath = value; OnPropertyChanged(); CheckBookContentChanged(); }
         }
 
-        public string ShelfDescription
+        public string BookDescription
         {
-            get => _shelfDescription;
-            set { _shelfDescription = value; OnPropertyChanged(); CheckBookContentChanged(); }
+            get => _bookDescription;
+            set { _bookDescription = value; OnPropertyChanged(); CheckBookContentChanged(); }
         }
 
         private bool _isBookContentChanged;
@@ -139,22 +137,25 @@ namespace MyBookShelf.ViewModel
 
         public ICommand SelectFb2FileCommand { get; }
         public ICommand SetRatingCommand { get; }
+        public ICommand AddGenreCommand { get; }
+
         public SelectedBookViewModel(int bookId, NavigationViewModel navigationViewModel, IBookProviders bookProviders, IBookGenreProviders bookGenreProviders, IGenreProviders genreProviders)
         {
             _bookProviders = bookProviders;
             _bookGenreProviders = bookGenreProviders;
             _genreProviders = genreProviders;
             _navigationViewModel = navigationViewModel;
-
+            _bookID = bookId;
             DeleteBookCommand = new RelayCommand(DeleteBook);
             YesDeleteBookCommand = new AsyncRelayCommand(ConfirmDeleteBookAsync);
             NoDeleteBookCommand = new RelayCommand(CancelDeleteBook);
             CommitChangesBookCommand = new AsyncRelayCommand(CommitBookChangesAsync);
             CancelChangesBookCommand = new RelayCommand(CancelBookChanges);
             SelectFb2FileCommand = new AsyncRelayCommand(SelectFb2File);
-            SetRatingCommand = new RelayCommand(SetRating);          
-            
-           LoadBookData(bookId);
+            SetRatingCommand = new RelayCommand(SetRating);
+            AddGenreCommand = new AsyncRelayCommand(AddGenre);
+
+            LoadBookData(_bookID);
         }
  
         private async void LoadBookData(int bookId)
@@ -166,10 +167,43 @@ namespace MyBookShelf.ViewModel
                 Author = SelectedBook.Author;
                 PageCountText = SelectedBook.CountPages.ToString();
                 SelectedImagePath = SelectedBook.PathImg;
-                ShelfDescription = SelectedBook.Description;
+                BookDescription = SelectedBook.Description;
                 SelectedRating = SelectedBook.Rating ;
+
+                LoadBookGenresAsync();
             }
         }
+        private async Task AddGenre()
+        {
+            var viewModel = new ManageBookGenreViewModel(SelectedBook.IdBook, _bookGenreProviders, _genreProviders);
+            var addBookWindow = new ManageBookGenre
+            {
+                DataContext = viewModel
+            };
+            addBookWindow.ShowDialog();
+            SelectedBook = await _bookProviders.GetByIdAsync(_bookID);
+            LoadBookGenresAsync();
+        }
+
+
+        private async void LoadBookGenresAsync()
+        {
+            var allGenres = await _genreProviders.GetAllAsync(); // Отримуємо всі жанри з бази
+
+            var bookGenres = allGenres.Where(g => SelectedBook?.BookGenres?.Any(bg => bg.IdGenre == g.IdGenre) == true);
+
+            if (bookGenres.Any())
+            {
+                var genreNames = bookGenres.Select(g => g.Name).ToList();
+                Genre = string.Join(", ", genreNames); // Перетворюємо у рядок через кому
+            }
+            else
+            {
+                Genre = "Без жанру"; // Якщо жанри відсутні
+            }
+            OnPropertyChanged(nameof(Genre)); // Оновлюємо UI
+        }
+
         private void UpdateRatings()
         {
             Ratings.Clear();
@@ -182,7 +216,6 @@ namespace MyBookShelf.ViewModel
                 });
             }
         }
-
         private void SetRating(object rating)
         {
             if (rating is int newRating)
@@ -207,13 +240,14 @@ namespace MyBookShelf.ViewModel
         private async Task ConfirmDeleteBookAsync()
         {
             if (SelectedBook == null) return;
+            await _bookProviders.DeleteAsync(SelectedBook);
 
             if (_navigationViewModel.GoBackCommand.CanExecute(null))
             {
                 _navigationViewModel.GoBackCommand.Execute(null);
             }
 
-            await _bookProviders.DeleteAsync(SelectedBook);
+           
 
             IsDeleteBookButton = true;
             IsDeleteBook = false;
@@ -227,7 +261,7 @@ namespace MyBookShelf.ViewModel
                 Author = SelectedBook.Author;
                 PageCountText = SelectedBook.CountPages.ToString();
                 SelectedImagePath = SelectedBook.PathImg;
-                ShelfDescription = SelectedBook.Description;
+                BookDescription = SelectedBook.Description;
                 SelectedRating = SelectedBook.Rating;
             }
         }
@@ -236,7 +270,7 @@ namespace MyBookShelf.ViewModel
         {
             if (!string.IsNullOrWhiteSpace(Title) && SelectedBook != null)
             {
-                var updatedBook = new Book { IdBook = SelectedBook.IdBook, Title = Title, Author = Author, CountPages = _pageCount ?? 0, PathImg = SelectedImagePath, Description = ShelfDescription,Rating= SelectedRating, IdShelf = SelectedBook.IdShelf };
+                var updatedBook = new Book { IdBook = SelectedBook.IdBook, Title = Title, Author = Author, CountPages = _pageCount ?? 0, PathImg = SelectedImagePath, Description = BookDescription,Rating= SelectedRating, IdShelf = SelectedBook.IdShelf };
                 await _bookProviders.UpdateAsync(updatedBook);
                 SelectedBook = updatedBook;
             }
@@ -251,7 +285,7 @@ namespace MyBookShelf.ViewModel
                 Author != SelectedBook.Author ||
                 PageCountText != SelectedBook.CountPages.ToString() ||
                 SelectedImagePath != SelectedBook.PathImg ||
-                ShelfDescription != SelectedBook.Description||
+                BookDescription != SelectedBook.Description||
                 SelectedRating != SelectedBook.Rating;
 
             OnPropertyChanged(nameof(IsBookContentChanged));
@@ -279,7 +313,9 @@ namespace MyBookShelf.ViewModel
                     var result = await Fb2Parser.ParseFb2FileAsync(openFileDialog.FileName);
                     Title = result.bookTitle;
                     Author = result.bookAuthor;
-                    ShelfDescription = result.bookDescription;
+                    BookDescription = result.bookDescription?.Length > 700
+                        ? result.bookDescription.Substring(0, 700)
+                        : result.bookDescription;
                     SelectedImagePath = result.imagePath;
                 }
                 else if (extension == ".png" || extension == ".jpg")

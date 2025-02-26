@@ -12,7 +12,7 @@ namespace MyBookShelf.DBContext.EntityConfigurations
             builder.HasOne(bg => bg.Book)
                     .WithMany(b => b.BookGenres)
                     .HasForeignKey(bg => bg.IdBook)
-                    .OnDelete(DeleteBehavior.Restrict)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
             builder.HasOne(bg => bg.Genre)
                    .WithMany(g => g.BookGenres) 

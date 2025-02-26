@@ -25,7 +25,8 @@
                     <Button  Style="{StaticResource BookButtonStyle}"
                              Height="270" 
                              Width="182" 
-                             Command="{Binding SelectFb2FileCommand }">
+                             Command="{Binding SelectFb2FileCommand }"
+                             VerticalAlignment="Top">
                         <Button.Background>
                             <ImageBrush ImageSource="{Binding SelectedImagePath, Converter={StaticResource NullToImageConverter}}" Stretch="UniformToFill"/>
                         </Button.Background>
@@ -45,20 +46,38 @@
                     <!-- Інформація про книгу -->
                     <StackPanel Grid.Column="1" Margin="10 0 0 0">
 
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,9">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0" Height="32">
                             <TextBlock Text="Title:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
                             <TextBox Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ShelfTextBoxStyle}" Padding="0,10,0,0"  VerticalAlignment="Center" Margin="11,3,0,0"/>
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <StackPanel Orientation="Horizontal" Margin="0,9,0,9">
                             <TextBlock Text="Author:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
                             <TextBox Text="{Binding Author, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ShelfTextBoxStyle}" Padding="0,10,0,0" VerticalAlignment="Center" Margin="11,3,0,0"/>
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                            <TextBlock Text="Genre:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
-                            <TextBox Text="жанри" Style="{StaticResource ShelfTextBoxStyle}" VerticalAlignment="Center" Padding="0,10,0,0" Margin="11,3,0,0"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,1">
+                            <TextBlock Text="Genre:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30" VerticalAlignment="Center"/>
+
+                            <TextBox Text="{Binding Genre, Mode=TwoWay}"
+                                     Style="{StaticResource ShelfTextBoxStyle}" 
+                                     VerticalAlignment="Center" 
+                                     Padding="0,10,0,0" 
+                                     Margin="11,3,0,0"
+                                     IsReadOnly="True"
+                                     TextWrapping="Wrap" 
+                                     AcceptsReturn="True"
+                                     Height="70" Width="411"/>
+
+
+                            <Button Content="+" 
+                                    Command="{Binding AddGenreCommand}"
+                                    Width="30" Height="30" 
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource ShelfButton}"/>
                         </StackPanel>
+
 
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,17">
                             <TextBlock Text="Page:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
@@ -120,13 +139,14 @@
                     <StackPanel Orientation="Vertical" Margin="3,12,0,6">
                         <TextBlock Text="Description" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30" />
                         <TextBox Style="{StaticResource ShelfTextBoxStyle}" 
-                         Text="{Binding ShelfDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding BookDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Margin="0"
                          Width="Auto"
                          Height="101"
                          Padding="0,5,0,0"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"
+                         MaxLength="700"
                          VerticalScrollBarVisibility="Hidden"/>
                     </StackPanel>
 

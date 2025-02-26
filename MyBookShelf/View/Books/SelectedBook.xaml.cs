@@ -13,6 +13,5 @@ namespace MyBookShelf.View
             InitializeComponent();
 
         }
-
     }
 }

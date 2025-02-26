@@ -17,6 +17,8 @@
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <converters:NullToVisibilityConverter  x:Key="NullToVisibilityConverter"/>
             <converters:NullToImageSourceConverter x:Key="NullToImageConverter"/>
+            <converters:BoolToTextDecorationConverter x:Key="BoolToTextDecorationConverter"/>
+            <converters:BoolToTextColorConverter x:Key="BoolToTextColorConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

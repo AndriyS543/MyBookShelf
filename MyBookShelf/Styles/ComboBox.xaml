@@ -5,7 +5,7 @@
     <Style x:Key="ComboBoxShelvesStyle" TargetType="ComboBox">
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="Width" Value="200" />
+        <Setter Property="Width" Value="300" />
         <Setter Property="SelectedIndex" Value="0" />
         <Setter Property="FontSize" Value="24" />
         <Setter Property="FontFamily" Value="Microsoft YaHei UI" />
