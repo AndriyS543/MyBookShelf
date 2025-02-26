@@ -13,13 +13,15 @@ namespace MyBookShelf.ViewModel
 {
     public class SelectedBookViewModel : ViewModelBase
     {
+        // Dependencies for data retrieval
         private readonly IBookProviders _bookProviders;
         private readonly IBookGenreProviders _bookGenreProviders;
         private readonly IGenreProviders _genreProviders;
         private readonly NavigationViewModel _navigationViewModel;
         private readonly int _bookID;
 
-        private Book _selectedBook;
+        // The currently selected book
+        private Book _selectedBook = new Book();
         public Book SelectedBook
         {
             get => _selectedBook;
@@ -36,12 +38,13 @@ namespace MyBookShelf.ViewModel
             }
         }
 
-        private string _title;
-        private string _author;
-        private string _genre;
+        // Book properties for UI binding
+        private string _title = "";
+        private string _author = "";
+        private string _genre = "";
         private int? _pageCount;
-        private string _selectedImagePath;
-        private string _bookDescription;
+        private string _selectedImagePath = "";
+        private string _bookDescription = "";
 
         public string Title
         {
@@ -88,6 +91,7 @@ namespace MyBookShelf.ViewModel
             set { _bookDescription = value; OnPropertyChanged(); CheckBookContentChanged(); }
         }
 
+        // Flags to track book changes and deletion
         private bool _isBookContentChanged;
         public bool IsBookContentChanged
         {
@@ -112,6 +116,7 @@ namespace MyBookShelf.ViewModel
             set { _isDeleteBook = value; OnPropertyChanged(); }
         }
 
+        // Rating properties
         private int _selectedRating = -1;
         public int SelectedRating
         {
@@ -129,12 +134,12 @@ namespace MyBookShelf.ViewModel
         }
         public ObservableCollection<RatingItem> Ratings { get; } = new();
 
+        // Commands for user interactions
         public ICommand DeleteBookCommand { get; }
         public ICommand YesDeleteBookCommand { get; }
         public ICommand NoDeleteBookCommand { get; }
         public ICommand CommitChangesBookCommand { get; }
         public ICommand CancelChangesBookCommand { get; }
-
         public ICommand SelectFb2FileCommand { get; }
         public ICommand SetRatingCommand { get; }
         public ICommand AddGenreCommand { get; }
@@ -146,18 +151,23 @@ namespace MyBookShelf.ViewModel
             _genreProviders = genreProviders;
             _navigationViewModel = navigationViewModel;
             _bookID = bookId;
+
+            // Initialize commands
             DeleteBookCommand = new RelayCommand(DeleteBook);
             YesDeleteBookCommand = new AsyncRelayCommand(ConfirmDeleteBookAsync);
             NoDeleteBookCommand = new RelayCommand(CancelDeleteBook);
             CommitChangesBookCommand = new AsyncRelayCommand(CommitBookChangesAsync);
             CancelChangesBookCommand = new RelayCommand(CancelBookChanges);
-            SelectFb2FileCommand = new AsyncRelayCommand(SelectFb2File);
+            SelectFb2FileCommand = new RelayCommand(SelectFb2File);
             SetRatingCommand = new RelayCommand(SetRating);
             AddGenreCommand = new AsyncRelayCommand(AddGenre);
 
             LoadBookData(_bookID);
         }
- 
+
+        /// <summary>
+        /// Loads book data asynchronously.
+        /// </summary>
         private async void LoadBookData(int bookId)
         {
             SelectedBook = await _bookProviders.GetByIdAsync(bookId);
@@ -173,6 +183,10 @@ namespace MyBookShelf.ViewModel
                 LoadBookGenresAsync();
             }
         }
+
+        /// <summary>
+        /// Add genres
+        /// </summary>
         private async Task AddGenre()
         {
             var viewModel = new ManageBookGenreViewModel(SelectedBook.IdBook, _bookGenreProviders, _genreProviders);
@@ -185,25 +199,29 @@ namespace MyBookShelf.ViewModel
             LoadBookGenresAsync();
         }
 
-
+        /// <summary>
+        /// Loads genres associated with the selected book.
+        /// </summary>
         private async void LoadBookGenresAsync()
         {
-            var allGenres = await _genreProviders.GetAllAsync(); // Отримуємо всі жанри з бази
+            var allGenres = await _genreProviders.GetAllAsync();
 
             var bookGenres = allGenres.Where(g => SelectedBook?.BookGenres?.Any(bg => bg.IdGenre == g.IdGenre) == true);
 
             if (bookGenres.Any())
             {
                 var genreNames = bookGenres.Select(g => g.Name).ToList();
-                Genre = string.Join(", ", genreNames); // Перетворюємо у рядок через кому
+                Genre = string.Join(", ", genreNames);
             }
             else
             {
-                Genre = "Без жанру"; // Якщо жанри відсутні
+                Genre = "No genre";
             }
-            OnPropertyChanged(nameof(Genre)); // Оновлюємо UI
         }
 
+        /// <summary>
+        /// Updates the book rating UI.
+        /// </summary>
         private void UpdateRatings()
         {
             Ratings.Clear();
@@ -216,6 +234,10 @@ namespace MyBookShelf.ViewModel
                 });
             }
         }
+
+        /// <summary>
+        /// Sets the selected book rating and updates ratings
+        /// </summary>
         private void SetRating(object rating)
         {
             if (rating is int newRating)
@@ -225,34 +247,51 @@ namespace MyBookShelf.ViewModel
             }
         }
 
+        /// <summary>
+        /// Controls the visibility of the delete book button and confirmation message
+        /// </summary>
+        private void SetDeleteBookState(bool isButtonVisible, bool isDeleteVisible)
+        {
+            IsDeleteBookButton = isButtonVisible;
+            IsDeleteBook = isDeleteVisible;
+        }
+
+        /// <summary>
+        /// Initiates the delete book process by showing the confirmation message
+        /// </summary>
         private void DeleteBook(object obj)
         {
-            IsDeleteBookButton = false;
-            IsDeleteBook = true;
+            SetDeleteBookState(false, true);
         }
 
+        /// <summary>
+        /// Cancels the delete book process and restores the button visibility
+        /// </summary>
         private void CancelDeleteBook(object obj)
         {
-            IsDeleteBookButton = true;
-            IsDeleteBook = false;
+            SetDeleteBookState(true, false);
         }
 
+        /// <summary>
+        /// Confirms and deletes the selected book asynchronously
+        /// </summary>
         private async Task ConfirmDeleteBookAsync()
         {
             if (SelectedBook == null) return;
             await _bookProviders.DeleteAsync(SelectedBook);
 
+            // Navigates back if possible
             if (_navigationViewModel.GoBackCommand.CanExecute(null))
             {
                 _navigationViewModel.GoBackCommand.Execute(null);
             }
 
-           
-
-            IsDeleteBookButton = true;
-            IsDeleteBook = false;
+            SetDeleteBookState(true, false);
         }
 
+        /// <summary>
+        /// Cancels any unsaved changes and restores book details
+        /// </summary>
         private void CancelBookChanges(object obj)
         {
             if (SelectedBook != null)
@@ -266,16 +305,30 @@ namespace MyBookShelf.ViewModel
             }
         }
 
+        /// <summary>
+        /// Saves changes to the selected book asynchronously
+        /// </summary>
         private async Task CommitBookChangesAsync()
         {
             if (!string.IsNullOrWhiteSpace(Title) && SelectedBook != null)
             {
-                var updatedBook = new Book { IdBook = SelectedBook.IdBook, Title = Title, Author = Author, CountPages = _pageCount ?? 0, PathImg = SelectedImagePath, Description = BookDescription,Rating= SelectedRating, IdShelf = SelectedBook.IdShelf };
+                var updatedBook = new Book { 
+                    IdBook = SelectedBook.IdBook,
+                    Title = Title,
+                    Author = Author,
+                    CountPages = _pageCount ?? 0,
+                    PathImg = SelectedImagePath,
+                    Description = BookDescription,
+                    Rating= SelectedRating,
+                    IdShelf = SelectedBook.IdShelf };
                 await _bookProviders.UpdateAsync(updatedBook);
                 SelectedBook = updatedBook;
             }
         }
 
+        /// <summary>
+        /// Checks if any book content has changed and updates the flag
+        /// </summary>
         private void CheckBookContentChanged()
         {
             if (SelectedBook == null) return;
@@ -291,7 +344,10 @@ namespace MyBookShelf.ViewModel
             OnPropertyChanged(nameof(IsBookContentChanged));
         }
 
-        private async Task SelectFb2File()
+        /// <summary>
+        /// Opens a file dialog to select an FB2 or image file.
+        /// </summary>
+        private async void SelectFb2File(object p)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
@@ -301,32 +357,63 @@ namespace MyBookShelf.ViewModel
 
             if (openFileDialog.ShowDialog() == true)
             {
-                string extension = Path.GetExtension(openFileDialog.FileName).ToLower();
-                string imagesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images");
-                if (!Directory.Exists(imagesFolder))
-                {
-                    Directory.CreateDirectory(imagesFolder);
-                }
-
-                if (extension == ".fb2")
-                {
-                    var result = await Fb2Parser.ParseFb2FileAsync(openFileDialog.FileName);
-                    Title = result.bookTitle;
-                    Author = result.bookAuthor;
-                    BookDescription = result.bookDescription?.Length > 700
-                        ? result.bookDescription.Substring(0, 700)
-                        : result.bookDescription;
-                    SelectedImagePath = result.imagePath;
-                }
-                else if (extension == ".png" || extension == ".jpg")
-                {
-                    string newFileName = Guid.NewGuid().ToString() + extension;
-                    string destinationPath = Path.Combine(imagesFolder, newFileName);
-                    File.Copy(openFileDialog.FileName, destinationPath, true);
-                    SelectedImagePath = destinationPath;
-                }
+                await ProcessSelectedFileAsync(openFileDialog.FileName);
             }
         }
 
+        /// <summary>
+        /// Processes the selected file (either FB2 or image).
+        /// </summary>
+        private async Task ProcessSelectedFileAsync(string filePath)
+        {
+            string extension = Path.GetExtension(filePath).ToLower();
+            if (extension == ".fb2")
+            {
+                await ProcessFb2FileAsync(filePath);
+            }
+            else if (extension == ".png" || extension == ".jpg")
+            {
+                SaveImageFile(filePath);
+            }
+        }
+
+        /// <summary>
+        /// Parses the selected FB2 file and extracts book details.
+        /// </summary>
+        private async Task ProcessFb2FileAsync(string filePath)
+        {
+            var result = await Fb2Parser.ParseFb2FileAsync(filePath);
+
+            Title = string.IsNullOrEmpty(result.bookTitle) ? "Unknown Title" : result.bookTitle;
+            Author = string.IsNullOrEmpty(result.bookAuthor) ? "Unknown Author" : result.bookAuthor;
+
+            BookDescription = string.IsNullOrEmpty(result.bookDescription)
+                ? "No description available"
+                : result.bookDescription.Length > 700
+                    ? result.bookDescription.Substring(0, 700)
+                    : result.bookDescription;
+
+            SelectedImagePath = string.IsNullOrEmpty(result.imagePath) ? string.Empty : result.imagePath;
+        }
+
+
+
+        /// <summary>
+        /// Saves the selected image file to a local directory.
+        /// </summary>
+        private void SaveImageFile(string filePath)
+        {
+            string imagesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images");
+            if (!Directory.Exists(imagesFolder))
+            {
+                Directory.CreateDirectory(imagesFolder);
+            }
+            string newFileName = Guid.NewGuid().ToString() + Path.GetExtension(filePath);
+            string destinationPath = Path.Combine(imagesFolder, newFileName);
+            File.Copy(filePath, destinationPath, true);
+            SelectedImagePath = destinationPath;
+        }
     }
+
 }
+

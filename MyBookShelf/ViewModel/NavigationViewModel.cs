@@ -84,15 +84,8 @@ namespace MyBookShelf.ViewModel
 
         private void Reading(object obj) => CurrentView = new ReadingMainViewModel();
 
-
-
         // BooksMain --> SelectedBook 
-        
-
         public ICommand OpenSelectedBookCommand { get; }
-
-  
-
         private void OpenSelectedBook(object obj)
         {
             if (obj is int IdBook)
@@ -100,8 +93,6 @@ namespace MyBookShelf.ViewModel
                 CurrentView = new SelectedBookViewModel(IdBook,this, _bookProviders, _bookGenreProviders, _genreProviders);
             }
         }
-
-        //
 
         public NavigationViewModel(ICreator creator, IShelfProviders shelfProviders, IBookProviders bookProviders,IBookGenreProviders bookGenreProviders, IGenreProviders genreProviders)
         {
@@ -118,7 +109,6 @@ namespace MyBookShelf.ViewModel
             GoBackCommand = new RelayCommand(GoBack, _ => _viewHistory.Count > 0);
 
             //For selectedBook
-
             OpenSelectedBookCommand = new RelayCommand(OpenSelectedBook);
 
             // Startup Page

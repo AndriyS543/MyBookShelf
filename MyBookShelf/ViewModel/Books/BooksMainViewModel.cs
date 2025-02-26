@@ -74,9 +74,10 @@ namespace MyBookShelf.ViewModel
                 var shelves = await _shelfProvider.GetAllAsync();
                 var allBooks = shelves.SelectMany(s => s.Books).ToList();
 
+                Shelves.Add(new Shelf { Name = "My Book Shelf", IdShelf = -1, Books = allBooks });
                 if (shelves.Any())
                 {
-                    Shelves.Add(new Shelf { Name = "My Book Shelf", IdShelf = -1, Books = allBooks });
+                    
                     foreach (var shelf in shelves)
                     {
                         Shelves.Add(shelf);
@@ -177,7 +178,7 @@ namespace MyBookShelf.ViewModel
         /// </summary>
         private void OpenAddNewBookDialog()
         {
-            var viewModel = new AddNewBookViewModel(SelectedShelf, _creator, _bookProviders, _bookGenreProviders, _genreProviders);
+            var viewModel = new AddNewBookViewModel(SelectedShelf, _creator, _bookGenreProviders, _genreProviders);
             var addBookWindow = new AddNewBook
             {
                 DataContext = viewModel,

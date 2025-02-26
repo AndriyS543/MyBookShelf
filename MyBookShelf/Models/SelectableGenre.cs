@@ -25,7 +25,7 @@ namespace MyBookShelf.Models
             }
         }
 
-        public SelectableGenre(Genre genre,  IEnumerable<BookGenre> bookGenres = null,int bookId = -1)
+        public SelectableGenre(Genre genre,  IEnumerable<BookGenre> bookGenres = null, int bookId = -1)
         {
             Genre = genre;
             if (bookId > -1) 

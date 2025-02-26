@@ -9,17 +9,19 @@ using MyBookShelf.Services;
 using MyBookShelf.Utilities;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Net;
-using System.Windows;
 using System.Windows.Input;
-using System.Xml.Linq;
 
 namespace MyBookShelf.ViewModel
 {
-
-
     public class AddNewBookViewModel : ViewModelBase
     {
+        // Dependencies for data management
+        private readonly Shelf _shelf;
+        private readonly IBookGenreProviders _bookGenreProviders;
+        private readonly IGenreProviders _genreProviders;
+        private readonly ICreator _creator;
+
+        // Properties for book details
         private string? _tbCountPage;
         public string? tbCountPage
         {
@@ -29,12 +31,38 @@ namespace MyBookShelf.ViewModel
                 if (_tbCountPage != value)
                 {
                     _tbCountPage = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(); // Notify UI of changes
                 }
             }
         }
-        public ObservableCollection<SelectableGenre> Genres { get; set; }
-        public ICommand SelectGenreCommand { get; }
+
+        private string? _tbBookAuthor;
+        public string? tbBookAuthor
+        {
+            get => _tbBookAuthor;
+            set
+            {
+                if (_tbBookAuthor != value)
+                {
+                    _tbBookAuthor = value;
+                    OnPropertyChanged(); 
+                }
+            }
+        }
+
+        private string? _tbBookTitle;
+        public string? tbBookTitle
+        {
+            get => _tbBookTitle;
+            set
+            {
+                if (_tbBookTitle != value)
+                {
+                    _tbBookTitle = value;
+                    OnPropertyChanged(); 
+                }
+            }
+        }
 
         private string? _selectedImagePath;
         public string? SelectedImagePath
@@ -43,55 +71,22 @@ namespace MyBookShelf.ViewModel
             set
             {
                 _selectedImagePath = value;
-                OnPropertyChanged();
-            }
-        }
-        private string _tbBookAuthor;
-        public string tbBookAuthor
-        {
-            get => _tbBookAuthor;
-            set
-            {
-                if (_tbBookAuthor != value)
-                {
-                    _tbBookAuthor = value;
-                    OnPropertyChanged();
-                }
+                OnPropertyChanged(); 
             }
         }
 
-        private string _tbBookTitle;
-        public string tbBookTitle
-        {
-            get => _tbBookTitle;
-            set
-            {
-                if (_tbBookTitle != value)
-                {
-                    _tbBookTitle = value;
-                    OnPropertyChanged();
+        private string BookDescription = ""; // Stores book description
 
-                }
-            }
-        }
-        private readonly Shelf _shelf;
-        private readonly IShelfProviders _shelfProvider;
-        private readonly IBookProviders _bookProviders;
-        private readonly IBookGenreProviders _bookGenreProviders;
-        private readonly IGenreProviders _genreProviders;
-        private readonly ICreator _creator;
-
-        private string BookDescription = "";
+        public ObservableCollection<SelectableGenre> Genres { get; set; } = new ObservableCollection<SelectableGenre>();
         public ICommand SelectImageCommand { get; }
         public ICommand AddBooksCommand { get; }
         public ICommand ToggleGenreSelectionCommand { get; }
 
-
-        public AddNewBookViewModel(Shelf shelf, ICreator creator, IBookProviders bookProviders, IBookGenreProviders bookGenreProviders, IGenreProviders genreProviders)
+        // Constructor
+        public AddNewBookViewModel(Shelf shelf, ICreator creator, IBookGenreProviders bookGenreProviders, IGenreProviders genreProviders)
         {
             _shelf = shelf;
             _creator = creator;
-            _bookProviders = bookProviders;
             _bookGenreProviders = bookGenreProviders;
             _genreProviders = genreProviders;
 
@@ -99,44 +94,67 @@ namespace MyBookShelf.ViewModel
             SelectImageCommand = new RelayCommand(SelectFb2File);
             ToggleGenreSelectionCommand = new RelayCommand(ToggleGenreSelection);
 
-            _ = LoadGenresAsync();
+            _ = LoadGenresAsync(); // Load genres asynchronously
         }
 
+        /// <summary>
+        /// Loads available genres asynchronously.
+        /// </summary>
         private async Task LoadGenresAsync()
         {
             var existingBookGenres = await _bookGenreProviders.GetAllAsync();
-
             var genres = await _genreProviders.GetAllAsync();
-            // Перетворюємо список жанрів у SelectableGenre
+
             Genres = new ObservableCollection<SelectableGenre>(
                 genres.Select(genre => new SelectableGenre(genre, existingBookGenres))
             );
-            OnPropertyChanged(nameof(Genres)); // Оновлюємо прив’язку у UI
+            OnPropertyChanged(nameof(Genres)); // Notify UI about changes
         }
 
+        /// <summary>
+        /// Toggles genre selection.
+        /// </summary>
         private void ToggleGenreSelection(object p)
         {
             if (p is SelectableGenre genre)
             {
                 genre.IsSelected = !genre.IsSelected;
-                OnPropertyChanged();
+                OnPropertyChanged(); // Notify UI of changes
             }
         }
+
+        /// <summary>
+        /// Adds a new book to the database.
+        /// </summary>
         private async Task AddBooksAsync()
         {
-            var newBook = await _creator.CreateBookAsync(tbBookTitle,
-                Int32.Parse(_tbCountPage??"0"),
+            var newBook = await CreateBookAsync();
+            await AssignGenresToBookAsync(newBook.IdBook);
+        }
+
+        /// <summary>
+        /// Creates a new book entry asynchronously.
+        /// </summary>
+        private async Task<Book> CreateBookAsync()
+        {
+            return await _creator.CreateBookAsync(
+                tbBookTitle ?? "New book",
+                Int32.Parse(_tbCountPage ?? "0"),
                 _shelf.IdShelf,
-                tbBookAuthor,
+                tbBookAuthor ?? "No author",
                 BookDescription,
-                 _selectedImagePath ?? null,
-                 0);
-            var bookId = newBook.IdBook;
+                SelectedImagePath ?? "",
+                0);
+        }
+
+        /// <summary>
+        /// Assigns selected genres to the created book.
+        /// </summary>
+        private async Task AssignGenresToBookAsync(int bookId)
+        {
             if (bookId > 0)
             {
-                // Отримуємо вибрані жанри
                 var selectedGenres = Genres.Where(g => g.IsSelected).Select(g => g.Genre.IdGenre);
-
                 foreach (var genreId in selectedGenres)
                 {
                     await _bookGenreProviders.AddAsync(new BookGenre
@@ -147,33 +165,10 @@ namespace MyBookShelf.ViewModel
                 }
             }
         }
-        private void SelectImage(object p)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-            {
-                Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp",
-                Title = "Select an Image"
-            };
 
-            if (openFileDialog.ShowDialog() == true)
-            {
-                string sourcePath = openFileDialog.FileName;
-                string imagesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "images");
-
-                if (!Directory.Exists(imagesFolder))
-                {
-                    Directory.CreateDirectory(imagesFolder);
-                }
-
-                string newFileName = Guid.NewGuid().ToString() + Path.GetExtension(sourcePath);
-                string destinationPath = Path.Combine(imagesFolder, newFileName);
-
-                File.Copy(sourcePath, destinationPath, true);
-
-                // Тут можна оновити властивість, якщо потрібно прив'язати зображення до UI
-                SelectedImagePath = destinationPath;
-            }
-        }
+        /// <summary>
+        /// Opens a file dialog to select an FB2 or image file.
+        /// </summary>
         private async void SelectFb2File(object p)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -184,33 +179,61 @@ namespace MyBookShelf.ViewModel
 
             if (openFileDialog.ShowDialog() == true)
             {
-                var result = await Fb2Parser.ParseFb2FileAsync(openFileDialog.FileName);
-                string extension = Path.GetExtension(openFileDialog.FileName).ToLower();
-                string imagesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images");
-                if (!Directory.Exists(imagesFolder))
-                {
-                    Directory.CreateDirectory(imagesFolder);
-                }
-                if (extension == ".fb2")
-                {
-                    tbBookTitle = result.bookTitle;
-                    tbBookAuthor = result.bookAuthor;
-                    BookDescription = result.bookDescription?.Length > 700
-                        ? result.bookDescription.Substring(0, 700)
-                        : result.bookDescription;
-
-                    SelectedImagePath = result.imagePath;
-                }
-                else if (extension == ".png" || extension == ".jpg")
-                {
-                    string newFileName = Guid.NewGuid().ToString() + extension;
-                    string destinationPath = Path.Combine(imagesFolder, newFileName);
-                    File.Copy(openFileDialog.FileName, destinationPath, true);
-                    SelectedImagePath = destinationPath;
-                }
-                
+                await ProcessSelectedFileAsync(openFileDialog.FileName);
             }
         }
 
+        /// <summary>
+        /// Processes the selected file (either FB2 or image).
+        /// </summary>
+        private async Task ProcessSelectedFileAsync(string filePath)
+        {
+            string extension = Path.GetExtension(filePath).ToLower();
+            if (extension == ".fb2")
+            {
+                await ProcessFb2FileAsync(filePath);
+            }
+            else if (extension == ".png" || extension == ".jpg")
+            {
+                SaveImageFile(filePath);
+            }
+        }
+
+        /// <summary>
+        /// Parses the selected FB2 file and extracts book details.
+        /// </summary>
+        private async Task ProcessFb2FileAsync(string filePath)
+        {
+            var result = await Fb2Parser.ParseFb2FileAsync(filePath);
+
+            tbBookTitle = string.IsNullOrEmpty(result.bookTitle) ? "Unknown Title" : result.bookTitle;
+            tbBookAuthor = string.IsNullOrEmpty(result.bookAuthor) ? "Unknown Author" : result.bookAuthor;
+
+            BookDescription = string.IsNullOrEmpty(result.bookDescription)
+                ? "No description available"
+                : result.bookDescription.Length > 700
+                    ? result.bookDescription.Substring(0, 700)
+                    : result.bookDescription;
+
+            SelectedImagePath = string.IsNullOrEmpty(result.imagePath) ? string.Empty : result.imagePath;
+        }
+
+
+
+        /// <summary>
+        /// Saves the selected image file to a local directory.
+        /// </summary>
+        private void SaveImageFile(string filePath)
+        {
+            string imagesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images");
+            if (!Directory.Exists(imagesFolder))
+            {
+                Directory.CreateDirectory(imagesFolder);
+            }
+            string newFileName = Guid.NewGuid().ToString() + Path.GetExtension(filePath);
+            string destinationPath = Path.Combine(imagesFolder, newFileName);
+            File.Copy(filePath, destinationPath, true);
+            SelectedImagePath = destinationPath;
+        }
     }
 }

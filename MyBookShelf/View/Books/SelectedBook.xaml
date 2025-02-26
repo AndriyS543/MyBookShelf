@@ -14,6 +14,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
+            <!-- Top section: Book selection and details -->
             <Border Grid.Row="0">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -22,6 +23,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
+                    <!-- Button to select an FB2 file with an image preview -->
                     <Button  Style="{StaticResource BookButtonStyle}"
                              Height="270" 
                              Width="182" 
@@ -43,22 +45,33 @@
 
                     </Button>
 
-                    <!-- Інформація про книгу -->
+                    <!-- Book information section -->
                     <StackPanel Grid.Column="1" Margin="10 0 0 0">
 
+                        <!-- Title input -->
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,0" Height="32">
                             <TextBlock Text="Title:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
-                            <TextBox Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ShelfTextBoxStyle}" Padding="0,10,0,0"  VerticalAlignment="Center" Margin="11,3,0,0"/>
+                            <TextBox Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                     Style="{StaticResource ShelfTextBoxStyle}" 
+                                     Padding="0,10,0,0" 
+                                     VerticalAlignment="Center" 
+                                     Margin="11,3,0,0"/>
                         </StackPanel>
 
+                        <!-- Author input -->
                         <StackPanel Orientation="Horizontal" Margin="0,9,0,9">
                             <TextBlock Text="Author:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
-                            <TextBox Text="{Binding Author, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ShelfTextBoxStyle}" Padding="0,10,0,0" VerticalAlignment="Center" Margin="11,3,0,0"/>
+                            <TextBox Text="{Binding Author, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource ShelfTextBoxStyle}"
+                                     Padding="0,10,0,0" 
+                                     VerticalAlignment="Center"
+                                     Margin="11,3,0,0"/>
                         </StackPanel>
 
+                        <!-- Genre selection -->
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,1">
                             <TextBlock Text="Genre:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30" VerticalAlignment="Center"/>
-
+                            
                             <TextBox Text="{Binding Genre, Mode=TwoWay}"
                                      Style="{StaticResource ShelfTextBoxStyle}" 
                                      VerticalAlignment="Center" 
@@ -67,9 +80,8 @@
                                      IsReadOnly="True"
                                      TextWrapping="Wrap" 
                                      AcceptsReturn="True"
-                                     Height="70" Width="411"/>
-
-
+                                     Height="70" Width="409"/>
+                            
                             <Button Content="+" 
                                     Command="{Binding AddGenreCommand}"
                                     Width="30" Height="30" 
@@ -78,13 +90,17 @@
                                     Style="{StaticResource ShelfButton}"/>
                         </StackPanel>
 
-
+                        <!-- Page count input -->
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,17">
                             <TextBlock Text="Page:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
-                            <TextBox Text="{Binding PageCountText, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, NotifyOnValidationError=True}" Style="{StaticResource ShelfTextBoxStyle}" Padding="0,10,0,0" VerticalAlignment="Center" Margin="11,3,0,0"/>
+                            <TextBox Text="{Binding PageCountText, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, NotifyOnValidationError=True}"
+                                     Style="{StaticResource ShelfTextBoxStyle}" 
+                                     Padding="0,10,0,0" 
+                                     VerticalAlignment="Center" 
+                                     Margin="11,3,0,0"/>
                         </StackPanel>
 
-                        <!-- Рейтинг (5 кнопок) -->
+                        <!-- Book rating -->
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Rating:" FontSize="30" Style="{StaticResource TextSelectedBookMainStyle}"/>
 
@@ -104,69 +120,92 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </StackPanel>
-
-
-
-
-
                     </StackPanel>
 
-                    <!-- Кнопки редагування та видалення -->
+                    <!-- Edit and delete buttons -->
                     <StackPanel Grid.Column="2" 
-                            Orientation="Vertical" 
-                            HorizontalAlignment="Stretch" 
-                            VerticalAlignment="Center" 
-                            Margin="0,100,0,0">
+                                Orientation="Vertical" 
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Center" 
+                                Margin="0,100,0,0">
 
                         <Button Content="Delete"
                                 Style="{StaticResource ShelfButton}"
                                 Margin="0,44,0,0"
                                 Command="{Binding DeleteBookCommand}"
                                 Visibility="{Binding IsDeleteBookButton, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        
                         <StackPanel Orientation="Horizontal" 
                                     HorizontalAlignment="Stretch" 
                                     Margin="0,44,0,0"
                                     Visibility="{Binding IsDeleteBook, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <Button Content="✔️" Width="102" Height="44" Style="{StaticResource ShelfButton}" Margin="2,0,50,0" Command="{Binding YesDeleteBookCommand}"/>
-                            <Button Content="✖️" Width="102" Height="44" Style="{StaticResource ShelfButton}" Command="{Binding NoDeleteBookCommand}"/>
+                            
+                            <Button Content="✔️"
+                                    Width="102" 
+                                    Height="44" 
+                                    Style="{StaticResource ShelfButton}" 
+                                    Margin="2,0,50,0" 
+                                    Command="{Binding YesDeleteBookCommand}"/>
+                            
+                            <Button Content="✖️"
+                                    Width="102" 
+                                    Height="44" 
+                                    Style="{StaticResource ShelfButton}" 
+                                    Command="{Binding NoDeleteBookCommand}"/>
                         </StackPanel>
+                        
                     </StackPanel>
                 </Grid>
             </Border>
 
+            <!-- Bottom section: Book description and notes -->
             <Border Grid.Row="1">
                 <StackPanel>
+                    <!-- Book description input -->
                     <StackPanel Orientation="Vertical" Margin="3,12,0,6">
                         <TextBlock Text="Description" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30" />
                         <TextBox Style="{StaticResource ShelfTextBoxStyle}" 
-                         Text="{Binding BookDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Margin="0"
-                         Width="Auto"
-                         Height="101"
-                         Padding="0,5,0,0"
-                         TextWrapping="Wrap"
-                         AcceptsReturn="True"
-                         MaxLength="700"
-                         VerticalScrollBarVisibility="Hidden"/>
+                                 Text="{Binding BookDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0"
+                                 Width="Auto"
+                                 Height="101"
+                                 Padding="0,5,0,0"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 MaxLength="700"
+                                 VerticalScrollBarVisibility="Hidden"/>
                     </StackPanel>
 
+                    <!-- Notes section -->
                     <StackPanel Orientation="Vertical" Margin="3 0 14 0">
                         <TextBlock Text="Notes:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
                         <TextBox Style="{StaticResource ShelfTextBoxStyle}" 
-                         Text="Notes!!!"
-                         Margin="0"
-                         Width="Auto"
-                         Height="64.35"
-                         Padding="0,5,0,0"
-                         TextWrapping="Wrap"
-                         AcceptsReturn="True"
-                         VerticalScrollBarVisibility="Hidden"
-                         IsReadOnly="True"/>
+                                 Text="Notes!!!"
+                                 Margin="0"
+                                 Width="Auto"
+                                 Height="64.35"
+                                 Padding="0,5,0,0"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Hidden"
+                                 IsReadOnly="True"/>
                     </StackPanel>
+
+                    <!-- Buttons section -->
                     <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,32,0,0"
                                 Visibility="{Binding IsBookContentChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <Button Content="✔️" Width="102" Height="44" Style="{StaticResource ShelfButton}" Margin="0,0,24,0" Command="{Binding CommitChangesBookCommand}"/>
-                        <Button Content="✖️" Width="102" Height="44" Style="{StaticResource ShelfButton}" Command="{Binding CancelChangesBookCommand}"/>
+                        <Button Content="✔️" 
+                                Width="102" 
+                                Height="44" 
+                                Style="{StaticResource ShelfButton}" 
+                                Margin="0,0,24,0" 
+                                Command="{Binding CommitChangesBookCommand}"/>
+                        
+                        <Button Content="✖️" 
+                                Width="102" 
+                                Height="44" 
+                                Style="{StaticResource ShelfButton}" 
+                                Command="{Binding CancelChangesBookCommand}"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
