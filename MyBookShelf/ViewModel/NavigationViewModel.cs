@@ -3,6 +3,8 @@ using Learning_Words.Utilities;
 using MyBookShelf.Repositories.BookGenreRroviders;
 using MyBookShelf.Repositories.BookRroviders;
 using MyBookShelf.Repositories.GenreRroviders;
+using MyBookShelf.Repositories.NoteProviders;
+using MyBookShelf.Repositories.ReadingSessionProviders;
 using MyBookShelf.Repositories.ShelfProviders;
 using MyBookShelf.Services;
 
@@ -14,6 +16,8 @@ namespace MyBookShelf.ViewModel
         private readonly IBookProviders _bookProviders;
         private readonly IBookGenreProviders _bookGenreProviders;
         private readonly IGenreProviders _genreProviders;
+        private readonly IReadingSessionProviders _readingSessionProvider;
+        private readonly INoteProviders _noteProviders;
         private readonly ICreator _creator;
 
         private bool _isBooksChecked;
@@ -82,7 +86,7 @@ namespace MyBookShelf.ViewModel
         private void BooksMain(object obj) => CurrentView = new BooksMainViewModel(this,_creator, _shelfProvider, _bookProviders, _bookGenreProviders, _genreProviders);
         private void Shelves(object obj) => CurrentView = new ShelvesViewModel(_creator,_shelfProvider);
 
-        private void Reading(object obj) => CurrentView = new ReadingMainViewModel();
+        private void Reading(object obj) => CurrentView = new ReadingMainViewModel(this, _creator, _shelfProvider, _bookProviders, _bookGenreProviders, _genreProviders);
 
         // BooksMain --> SelectedBook 
         public ICommand OpenSelectedBookCommand { get; }
@@ -94,7 +98,18 @@ namespace MyBookShelf.ViewModel
             }
         }
 
-        public NavigationViewModel(ICreator creator, IShelfProviders shelfProviders, IBookProviders bookProviders,IBookGenreProviders bookGenreProviders, IGenreProviders genreProviders)
+
+        // ReadingMain --> SelectedBookReading
+        public ICommand OpenSelectedBookToReadCommand { get; }
+        private void OpenSelectedBookToRead(object obj)
+        {
+            if (obj is int IdBook)
+            {
+                CurrentView = new SelectedBookToReadViewModel(IdBook, this,_readingSessionProvider, _noteProviders);
+            }
+        }
+
+        public NavigationViewModel(ICreator creator, IShelfProviders shelfProviders, IBookProviders bookProviders,IBookGenreProviders bookGenreProviders, IGenreProviders genreProviders,IReadingSessionProviders readingSessionProviders,INoteProviders noteProviders)
         {
             BooksCommand = new RelayCommand(BooksMain);
             ShelvesCommand = new RelayCommand(Shelves);
@@ -104,12 +119,18 @@ namespace MyBookShelf.ViewModel
             _bookProviders = bookProviders;
             _genreProviders = genreProviders;
             _bookGenreProviders = bookGenreProviders;
+            _readingSessionProvider = readingSessionProviders;
+            _noteProviders = noteProviders;
             _creator = creator;
 
             GoBackCommand = new RelayCommand(GoBack, _ => _viewHistory.Count > 0);
 
             //For selectedBook
             OpenSelectedBookCommand = new RelayCommand(OpenSelectedBook);
+
+            //For ReadingMain -> selectedBookToRead
+            OpenSelectedBookToReadCommand = new RelayCommand(OpenSelectedBookToRead);
+
 
             // Startup Page
             CurrentView = new BooksMainViewModel(this,_creator, _shelfProvider, _bookProviders, _bookGenreProviders, _genreProviders);

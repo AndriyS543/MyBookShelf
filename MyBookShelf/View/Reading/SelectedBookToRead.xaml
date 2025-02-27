@@ -1,0 +1,108 @@
+﻿<UserControl x:Class="MyBookShelf.View.SelectedBookToRead"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="617"
+             d:DesignWidth="991">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Заголовок книги -->
+                <TextBlock Grid.Row="0"
+                           Text="Harry Potter and the Philosopher's Stone"
+                           FontSize="36" 
+                           Foreground="#B0C2DB"
+                           HorizontalAlignment="Center"
+                           Margin="29,0"
+                           FontFamily="Josefin Sans"/>
+
+                <!-- Таблиця -->
+                <DataGrid Grid.Row="1"
+                      HeadersVisibility="All"
+                      FontSize="32"
+                      Margin="10,10,10,5"
+                      Foreground="#C7B1A7"
+                      ItemsSource="{Binding DayProgress}"
+                      SelectedItem="{Binding SelectedDay}"
+                      Style="{StaticResource DataGridStyle}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="№" Binding="{Binding Number}" Width="*"  EditingElementStyle="{StaticResource DataGridEditingTextBoxStyle}"/>
+                        <DataGridTextColumn Header="Count page" Binding="{Binding CountPage}" Width="*" EditingElementStyle="{StaticResource DataGridEditingTextBoxStyle}"/>
+                        <DataGridTextColumn Header="Time" Binding="{Binding Time}" Width="*"/>
+                        <DataGridTextColumn Header="Percent" Binding="{Binding Percent}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+        <Border Grid.Column="1" Margin="15 15 15 0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Button Grid.Row="0"
+                        Style="{StaticResource BookButtonStyle}"
+                        Height="312" 
+                        Width="210">
+                    <Button.Background>
+                        <ImageBrush ImageSource="{Binding SelectedImagePath, Converter={StaticResource NullToImageConverter}}" Stretch="UniformToFill"/>
+                    </Button.Background>
+
+                    <TextBlock 
+                       TextAlignment="Center" 
+                       Padding="0 90 0 0" 
+                       Background="#C7B1A7" 
+                       Foreground="#705448" 
+                       FontSize="60" 
+                       Height="312" 
+                       Width="210" 
+                       Text="{Binding Title}"
+                       Visibility="{Binding SelectedImagePath, Converter={StaticResource NullToVisibilityConverter}}"/>
+                </Button>
+
+                <!-- Прогрес читання -->
+                <TextBlock Grid.Row="1" 
+                           Text="26%" 
+                           FontSize="64"
+                           Foreground="#705448"
+                           FontWeight="Bold"
+                           FontFamily="Josefin Sans"
+                           HorizontalAlignment="Center"
+                           Margin="0, 18, 0, 20"/>
+
+                <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center">
+                    <Button Content="Start page"
+                            Style="{StaticResource ShelfButton}"
+                            Height="44"
+                            Width="210"
+                            Command="{Binding AddNewShelfCommand}"/>
+                    <Button Content="Add notes"
+                            Style="{StaticResource ShelfButton}"
+                            Height="44"
+                            Width="210"
+                            Margin="0,12,0,0"
+                            Command=""
+                            Visibility="{Binding IsDeleteShelfButton, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                </StackPanel>
+
+            </Grid>
+        </Border>
+
+    </Grid>
+</UserControl>

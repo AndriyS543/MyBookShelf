@@ -56,4 +56,12 @@
         <Setter Property="Margin" Value="0,0,0,0" />
         <Setter Property="TextDecorations"  Value="Underline" />
     </Style>
+
+    <Style TargetType="TextBox" x:Key="DataGridEditingTextBoxStyle">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="MaxLength" Value="30"/>
+    </Style>
 </ResourceDictionary>

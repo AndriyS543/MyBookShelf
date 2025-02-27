@@ -26,4 +26,8 @@
     <DataTemplate DataType="{x:Type vm:ManageBookGenreViewModel}">
         <view:ManageBookGenre />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:SelectedBookToReadViewModel}">
+        <view:SelectedBookToRead />
+    </DataTemplate>
 </ResourceDictionary>

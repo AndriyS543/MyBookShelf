@@ -46,7 +46,7 @@ namespace MyBookShelf
 
             }
 
-            var navigationViewModel = new NavigationViewModel(_creator,_shelfProvider,_bookProviders,_bookGenreProviders,_genreProviders);
+            var navigationViewModel = new NavigationViewModel(_creator,_shelfProvider,_bookProviders,_bookGenreProviders,_genreProviders,_readingSessionProvider, _noteProviders);
             MainWindow = new MainWindow 
             {
                DataContext = navigationViewModel
