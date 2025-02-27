@@ -22,7 +22,7 @@
 
                 <!-- Заголовок книги -->
                 <TextBlock Grid.Row="0"
-                           Text="Harry Potter and the Philosopher's Stone"
+                           Text="{Binding tbBookTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                            FontSize="36" 
                            Foreground="#B0C2DB"
                            HorizontalAlignment="Center"
@@ -31,18 +31,25 @@
 
                 <!-- Таблиця -->
                 <DataGrid Grid.Row="1"
-                      HeadersVisibility="All"
                       FontSize="32"
-                      Margin="10,10,10,5"
                       Foreground="#C7B1A7"
-                      ItemsSource="{Binding DayProgress}"
-                      SelectedItem="{Binding SelectedDay}"
-                      Style="{StaticResource DataGridStyle}">
+                      Background="Transparent"
+                      ItemsSource="{Binding ReadingSessions}"
+                      SelectedItem="{Binding SelectedSession}"
+                      Style="{StaticResource DataGridStyle}"
+                          AlternationCount="1000">
+                    
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="№" Binding="{Binding Number}" Width="*"  EditingElementStyle="{StaticResource DataGridEditingTextBoxStyle}"/>
-                        <DataGridTextColumn Header="Count page" Binding="{Binding CountPage}" Width="*" EditingElementStyle="{StaticResource DataGridEditingTextBoxStyle}"/>
-                        <DataGridTextColumn Header="Time" Binding="{Binding Time}" Width="*"/>
-                        <DataGridTextColumn Header="Percent" Binding="{Binding Percent}" Width="*"/>
+                        <DataGridTextColumn Header="№" IsReadOnly="True" Width="*">
+                            <DataGridTextColumn.Binding>
+                                <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}" 
+                                         Path="AlternationIndex"
+                                         Converter="{StaticResource RowNumberConverter}"/>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Count page" IsReadOnly="True" Binding="{Binding FinishPage}" Width="*"/>
+                        <DataGridTextColumn Header="Time" IsReadOnly="True" Binding="{Binding ReadingTime}" Width="*"/>
+                        <DataGridTextColumn Header="Percent" IsReadOnly="True" Binding="{Binding FinishPercent}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
@@ -56,12 +63,13 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Button Grid.Row="0"
+                <Button  
                         Style="{StaticResource BookButtonStyle}"
                         Height="312" 
                         Width="210">
+                    
                     <Button.Background>
-                        <ImageBrush ImageSource="{Binding SelectedImagePath, Converter={StaticResource NullToImageConverter}}" Stretch="UniformToFill"/>
+                        <ImageBrush ImageSource="{Binding imagePath, Converter={StaticResource NullToImageConverter}}" Stretch="UniformToFill"/>
                     </Button.Background>
 
                     <TextBlock 
@@ -71,34 +79,35 @@
                        Foreground="#705448" 
                        FontSize="60" 
                        Height="312" 
-                       Width="210" 
-                       Text="{Binding Title}"
-                       Visibility="{Binding SelectedImagePath, Converter={StaticResource NullToVisibilityConverter}}"/>
+                       Width="210"                    
+                       Text="1"
+                       Visibility="{Binding imagePath, Converter={StaticResource NullToVisibilityConverter}}"/>
                 </Button>
 
                 <!-- Прогрес читання -->
                 <TextBlock Grid.Row="1" 
-                           Text="26%" 
+                           Text="{Binding TotalFinishPercent}"
                            FontSize="64"
                            Foreground="#705448"
                            FontWeight="Bold"
                            FontFamily="Josefin Sans"
                            HorizontalAlignment="Center"
-                           Margin="0, 18, 0, 20"/>
+                           Margin="0, 18, 0, 20"/>  
+
 
                 <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center">
                     <Button Content="Start page"
                             Style="{StaticResource ShelfButton}"
                             Height="44"
                             Width="210"
-                            Command="{Binding AddNewShelfCommand}"/>
-                    <Button Content="Add notes"
+                            Command="{Binding StartReadingCommand}"
+                            Margin="0,0,0,10"/>
+                    
+                    <Button Content="Delete Row"
                             Style="{StaticResource ShelfButton}"
                             Height="44"
                             Width="210"
-                            Margin="0,12,0,0"
-                            Command=""
-                            Visibility="{Binding IsDeleteShelfButton, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            Command="{Binding DeleteSessionCommand}"/>
                 </StackPanel>
 
             </Grid>

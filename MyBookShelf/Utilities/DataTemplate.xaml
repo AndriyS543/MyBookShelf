@@ -30,4 +30,8 @@
     <DataTemplate DataType="{x:Type vm:SelectedBookToReadViewModel}">
         <view:SelectedBookToRead />
     </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type vm:ReadingBookViewModel}">
+        <view:ReadingBook />
+    </DataTemplate>
 </ResourceDictionary>

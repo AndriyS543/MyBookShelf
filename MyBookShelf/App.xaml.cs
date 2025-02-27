@@ -33,7 +33,7 @@ namespace MyBookShelf
             _noteProviders = new DatabaseNoteProviders(_bookShelfDbContextFactory);
             _readingSessionProvider = new DatabaseReadingSessionProviders(_bookShelfDbContextFactory);
             _shelfProvider = new DatabaseShelfProviders(_bookShelfDbContextFactory);
-            _creator = new Creator(_shelfProvider,_bookProviders);
+            _creator = new Creator(_shelfProvider,_bookProviders, _readingSessionProvider);
         }
 
         protected async override void OnStartup(StartupEventArgs e)

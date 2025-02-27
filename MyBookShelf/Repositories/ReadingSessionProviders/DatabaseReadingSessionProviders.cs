@@ -47,16 +47,16 @@ namespace MyBookShelf.Repositories.ReadingSessionProviders
         }
 
 
-        public async Task<List<ReadingSession>> GetAllByBookIdAsync(int idBook)
+        public async Task<List<ReadingSession>> GetAllByBookAsync(Book book)
         {
             using (var context = _dbContextFactory.CreateDbContext())
             {
                 return await context.ReadingSessions
-                 .Where(r => r.IdBook == idBook)
-                 .ToListAsync();
+                    .Where(r => r.Book == book)
+                    .ToListAsync();
             }
-
         }
+
         public async Task<bool> UpdateAsync(ReadingSession entity)
         {
             using (var context = _dbContextFactory.CreateDbContext())

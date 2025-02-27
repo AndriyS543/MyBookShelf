@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyBookShelf.Models;
 using MyBookShelf.Repositories.BookRroviders;
+using MyBookShelf.Repositories.ReadingSessionProviders;
 using MyBookShelf.Repositories.ShelfProviders;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,12 @@ namespace MyBookShelf.Services
     {
         public readonly IShelfProviders _shelfProviders;
         public readonly IBookProviders _bookProviders;
-        public Creator(IShelfProviders shelfProviders , IBookProviders bookProviders)
+        public readonly IReadingSessionProviders _readingSessionProviders;
+        public Creator(IShelfProviders shelfProviders , IBookProviders bookProviders,IReadingSessionProviders readingSessionProviders)
         {
             _shelfProviders = shelfProviders;
             _bookProviders = bookProviders;
+            _readingSessionProviders = readingSessionProviders;
         }
 
         public async Task<Shelf> CreateShelfAsync(string nameShelf, string description)
@@ -52,5 +55,20 @@ namespace MyBookShelf.Services
             return book;
         }
 
+        public async Task<ReadingSession> CreateReadingSessionAsync(int idBook, TimeSpan readingTime,  int startPage, int finishPage, int finishPercent)
+        {
+            var readingSession = new ReadingSession
+            {
+                IdBook = idBook,
+                ReadingTime = readingTime,
+ 
+                StartPage = startPage,
+                FinishPage = finishPage,
+                FinishPercent = finishPercent
+            };
+            await _readingSessionProviders.AddAsync(readingSession);
+
+            return readingSession;
+        }
     }
 }

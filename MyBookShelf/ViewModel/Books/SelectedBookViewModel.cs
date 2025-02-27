@@ -9,6 +9,8 @@ using Microsoft.Win32;
 using MyBookShelf.Utilities;
 using System.IO;
 using MyBookShelf.View;
+using MyBookShelf.Repositories.ReadingSessionProviders;
+using MyBookShelf.Repositories.NoteProviders;
 namespace MyBookShelf.ViewModel
 {
     public class SelectedBookViewModel : ViewModelBase
@@ -17,6 +19,7 @@ namespace MyBookShelf.ViewModel
         private readonly IBookProviders _bookProviders;
         private readonly IBookGenreProviders _bookGenreProviders;
         private readonly IGenreProviders _genreProviders;
+        private readonly INoteProviders _noteProviders;
         private readonly NavigationViewModel _navigationViewModel;
         private readonly int _bookID;
 
@@ -45,7 +48,7 @@ namespace MyBookShelf.ViewModel
         private int? _pageCount;
         private string _selectedImagePath = "";
         private string _bookDescription = "";
-
+        private string _bookNotes = "";
         public string Title
         {
             get => _title;
@@ -91,6 +94,11 @@ namespace MyBookShelf.ViewModel
             set { _bookDescription = value; OnPropertyChanged(); CheckBookContentChanged(); }
         }
 
+        public string BookNotes
+        {
+            get => _bookNotes;
+            set { _bookNotes = value; OnPropertyChanged(); CheckBookContentChanged(); }
+        }
         // Flags to track book changes and deletion
         private bool _isBookContentChanged;
         public bool IsBookContentChanged
@@ -144,11 +152,12 @@ namespace MyBookShelf.ViewModel
         public ICommand SetRatingCommand { get; }
         public ICommand AddGenreCommand { get; }
 
-        public SelectedBookViewModel(int bookId, NavigationViewModel navigationViewModel, IBookProviders bookProviders, IBookGenreProviders bookGenreProviders, IGenreProviders genreProviders)
+        public SelectedBookViewModel(int bookId, NavigationViewModel navigationViewModel, IBookProviders bookProviders, IBookGenreProviders bookGenreProviders, IGenreProviders genreProviders, INoteProviders noteProviders)
         {
             _bookProviders = bookProviders;
             _bookGenreProviders = bookGenreProviders;
             _genreProviders = genreProviders;
+            _noteProviders = noteProviders;
             _navigationViewModel = navigationViewModel;
             _bookID = bookId;
 
@@ -199,6 +208,20 @@ namespace MyBookShelf.ViewModel
             LoadBookGenresAsync();
         }
 
+        public async Task<string> GetAllNotesForBookAsync(int bookId)
+        {
+            var notes = await _noteProviders.GetNotesByBookIdAsync(bookId);
+
+            var numberedNotes = notes
+                .OrderBy(n => n.IdNote) // сортуємо нотатки за ID (можна змінити логіку сортування)
+                .Select((n, index) => $"{index + 1}. {n.Text}") // нумеруємо нотатки
+                .ToList();
+
+            return string.Join("\n", numberedNotes);
+        }
+
+
+
         /// <summary>
         /// Loads genres associated with the selected book.
         /// </summary>
@@ -217,6 +240,7 @@ namespace MyBookShelf.ViewModel
             {
                 Genre = "No genre";
             }
+            BookNotes = await GetAllNotesForBookAsync(_bookID).ConfigureAwait(false);
         }
 
         /// <summary>

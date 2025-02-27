@@ -7,6 +7,7 @@ using MyBookShelf.Repositories.NoteProviders;
 using MyBookShelf.Repositories.ReadingSessionProviders;
 using MyBookShelf.Repositories.ShelfProviders;
 using MyBookShelf.Services;
+using MyBookShelf.View;
 
 namespace MyBookShelf.ViewModel
 {
@@ -70,7 +71,7 @@ namespace MyBookShelf.ViewModel
 
                 IsBooksChecked = CurrentView is BooksMainViewModel || CurrentView is SelectedBookViewModel;
                 IsShelvesChecked = CurrentView is ShelvesViewModel;
-                IsReadingChecked = CurrentView is ReadingMainViewModel;
+                IsReadingChecked = CurrentView is ReadingMainViewModel || CurrentView is SelectedBookToReadViewModel;
             }
         }
 
@@ -94,7 +95,7 @@ namespace MyBookShelf.ViewModel
         {
             if (obj is int IdBook)
             {
-                CurrentView = new SelectedBookViewModel(IdBook,this, _bookProviders, _bookGenreProviders, _genreProviders);
+                CurrentView = new SelectedBookViewModel(IdBook,this, _bookProviders, _bookGenreProviders, _genreProviders,_noteProviders);
             }
         }
 
@@ -105,7 +106,7 @@ namespace MyBookShelf.ViewModel
         {
             if (obj is int IdBook)
             {
-                CurrentView = new SelectedBookToReadViewModel(IdBook, this,_readingSessionProvider, _noteProviders);
+                CurrentView = new SelectedBookToReadViewModel(IdBook,_creator,_bookProviders, this,_readingSessionProvider, _noteProviders);
             }
         }
 

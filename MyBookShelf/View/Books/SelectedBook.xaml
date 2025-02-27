@@ -180,7 +180,7 @@
                     <StackPanel Orientation="Vertical" Margin="3 0 14 0">
                         <TextBlock Text="Notes:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
                         <TextBox Style="{StaticResource ShelfTextBoxStyle}" 
-                                 Text="Notes!!!"
+                                 Text="{Binding BookNotes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="0"
                                  Width="Auto"
                                  Height="64.35"
