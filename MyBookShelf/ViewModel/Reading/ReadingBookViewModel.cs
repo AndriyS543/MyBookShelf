@@ -162,10 +162,13 @@ namespace MyBookShelf.ViewModel
                 return;
             }
 
-
-
+            int finishPercent = 0;
+            if (_selectedBook.CountPages > 0)
+            {
+                finishPercent= (int)((double)(_pageFinish - _pageStart) / _selectedBook.CountPages * 100);
+            }
             // Обчислення фінального відсотка
-            int finishPercent = (int)((double)(_pageFinish-_pageStart) / _selectedBook.CountPages * 100);
+            
 
             // Створення сесії читання
             var readingSession = await _creator.CreateReadingSessionAsync(_selectedBook.IdBook, _elapsedTime, _pageStart??0, _pageFinish??0, finishPercent);

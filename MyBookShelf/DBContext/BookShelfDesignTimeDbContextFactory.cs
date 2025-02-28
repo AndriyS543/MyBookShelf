@@ -8,7 +8,7 @@ namespace MyBookShelf.DBContext
         public BookShelfDBContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<BookShelfDBContext>();
-            optionsBuilder.UseSqlServer("connection");
+            optionsBuilder.UseSqlite("Data Source=myBookShelf.db");
             return new BookShelfDBContext(optionsBuilder.Options);
         }
     }

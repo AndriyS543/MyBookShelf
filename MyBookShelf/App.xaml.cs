@@ -14,7 +14,7 @@ namespace MyBookShelf
 {
     public partial class App : Application
     {
-        private const string CONNECTION_ST = "connection";
+        private const string CONNECTION_ST = "Data Source=myBookShelf.db";
         private readonly BookShelfDbContextFactory _bookShelfDbContextFactory;
         private readonly IBookProviders _bookProviders;
         private readonly IGenreProviders _genreProviders;

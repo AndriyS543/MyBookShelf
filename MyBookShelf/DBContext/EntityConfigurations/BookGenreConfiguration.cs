@@ -9,6 +9,7 @@ namespace MyBookShelf.DBContext.EntityConfigurations
         public void Configure(EntityTypeBuilder<BookGenre> builder)
         {
             builder.HasKey(bg => bg.IdBookGenre);
+            builder.Property(b => b.IdBookGenre).ValueGeneratedOnAdd();
             builder.HasOne(bg => bg.Book)
                     .WithMany(b => b.BookGenres)
                     .HasForeignKey(bg => bg.IdBook)

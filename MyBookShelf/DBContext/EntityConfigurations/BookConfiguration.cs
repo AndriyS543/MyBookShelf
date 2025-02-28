@@ -9,6 +9,7 @@ namespace MyBookShelf.DBContext.EntityConfigurations
         public void Configure(EntityTypeBuilder<Book> builder)
         {
             builder.HasKey(b => b.IdBook);
+            builder.Property(b => b.IdBook).ValueGeneratedOnAdd();
             builder.Property(b => b.Title).HasMaxLength(255).IsRequired();
             builder.Property(b => b.PublicationDate).IsRequired();
             builder.Property(b => b.PathImg).HasMaxLength(255).IsRequired(false);

@@ -9,6 +9,7 @@ namespace MyBookShelf.DBContext.EntityConfigurations
         public void Configure(EntityTypeBuilder<ReadingSession> builder)
         {
             builder.HasKey(rs => rs.IdReadingSession);
+            builder.Property(rs => rs.IdReadingSession).ValueGeneratedOnAdd();
             builder.Property(rs => rs.ReadingTime).IsRequired();
             builder.Property(rs => rs.StartPage).IsRequired();
             builder.Property(rs => rs.FinishPage).IsRequired();
