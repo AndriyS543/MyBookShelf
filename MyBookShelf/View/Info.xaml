@@ -1,0 +1,238 @@
+﻿<UserControl x:Class="MyBookShelf.View.Info"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif" 
+             mc:Ignorable="d"
+             d:DesignWidth="991" Height="617">
+
+    <ScrollViewer VerticalScrollBarVisibility="Hidden" >
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="254" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="📌 Step-by-step guide" FontSize="24" FontWeight="Bold" 
+                       Style="{StaticResource TextSelectedBookMainStyle}"
+                       Margin="0 0 0 12"
+                       HorizontalAlignment="Center"  />
+
+            <!-- Adding a shelf -->
+            <Border Grid.Row="1" BorderBrush="#705448" BorderThickness="0 4 0 4">
+                <Grid Margin="0 0 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="475" Margin="20,10,0,10" Grid.ColumnSpan="2" >
+                        <TextBlock Text="🔹 How to add a shelf" FontSize="28" Style="{StaticResource TextShelvesMainStyle}" FontWeight="Bold"/>
+                        <TextBlock Text="1. Go to the Shelf section."
+                                Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="2. Click the Add Shelf button."
+                                Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="3. Enter the shelf name and description."
+                                Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="4. Click Save – the shelf will appear in the list."
+                                Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text=" ! If you delete the shelf, all books on it will also be deleted."
+                                Style="{StaticResource TextShelvesSecondStyle}" Foreground="Red"  FontSize="20" TextWrapping="Wrap" FontWeight="Bold"/>
+
+                    </StackPanel>
+
+                    <Border Grid.Column="1" BorderBrush="#B0C2DB" VerticalAlignment="Center" BorderThickness="3" CornerRadius="12" Width="335" Height="173">
+                        <Grid>
+                            <TextBlock Text="Loading GIF..." FontSize="16" 
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                       Visibility="{Binding IsGifLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                            <Image 
+                                Width="310" Height="160"                      
+                                gif:AnimationBehavior.SourceUri="{Binding GifCreateShelf}"
+                                RenderOptions.BitmapScalingMode="LowQuality"
+                                CacheMode="BitmapCache"
+                                Visibility="{Binding IsGifLoading, Converter={StaticResource InvertedBoolToVisibilityConverter}}" />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- Adding a book -->
+            <Border Grid.Row="2" BorderBrush="#705448" BorderThickness="0 0 0 4">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="20,10,0,10"  Width="475" HorizontalAlignment="Left" >
+                        <TextBlock Text="🔹 How to add a book" FontSize="28" Style="{StaticResource TextShelvesMainStyle}" FontWeight="Bold"/>
+                        <TextBlock Text="1. Go to the Books section."
+                    Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="2. Select your shelf from the dropdown menu."
+                    Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="3. Click the + button."
+                    Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="4. Select an FB2 file."
+                    Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="5. If necessary, change the cover."
+                    Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="6. Enter the number of pages and select genres."
+                    Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="7. Click Save – the book will appear on the selected shelf."
+                    Style="{StaticResource TextShelvesSecondStyle}" FontSize="20" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" BorderBrush="#B0C2DB" VerticalAlignment="Center" BorderThickness="3" CornerRadius="12" Width="335" Height="173">
+                        <Grid>
+                            <TextBlock Text="Loading GIF..." FontSize="16" 
+                           HorizontalAlignment="Center" VerticalAlignment="Center" 
+                           Visibility="{Binding IsGifLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                            <Image 
+                                Width="310" Height="160"                      
+                                gif:AnimationBehavior.SourceUri="{Binding GifAddBook}"
+                                RenderOptions.BitmapScalingMode="LowQuality"
+                                CacheMode="BitmapCache"
+                                Visibility="{Binding IsGifLoading, Converter={StaticResource InvertedBoolToVisibilityConverter}}" />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+       
+
+            <Border Grid.Row="3" BorderBrush="#705448" BorderThickness="0 0 0 4">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0"  HorizontalAlignment="Left" Margin="20 10 0 10" Width="475" Grid.ColumnSpan="2">
+                        <TextBlock Text="🔹 How to add a reading session" FontSize="28"
+                       Style="{StaticResource TextShelvesMainStyle}" FontWeight="Bold"/>
+                        <TextBlock Text="1. Go to the Reading section."
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="2. Select the shelf where the book is located."
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="3. Click on the book."
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="4. Start the reading session by clicking the 'Start reading' button." TextWrapping="Wrap"
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="5. If necessary, enter your own notes."
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="6. Enter the starting and ending page."
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="7. Click the checkmark to save the session."
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20" MaxWidth="468" TextWrapping="Wrap"/>
+                        <TextBlock Text="8. If necessary, the session can be deleted."
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20" MaxWidth="468" TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <Border Grid.Column="1" BorderBrush="#B0C2DB" VerticalAlignment="Center" BorderThickness="3" CornerRadius="12" Width="335" Height="173">
+                        <Grid>
+                            <!-- Placeholder during loading -->
+                            <TextBlock Text="Loading GIF..." FontSize="16"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Visibility="{Binding IsGifLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                            <!-- GIF image -->
+                            <Image Width="310" Height="160"                      
+                       gif:AnimationBehavior.SourceUri="{Binding GifReadingSession}"
+                       RenderOptions.BitmapScalingMode="LowQuality"
+                       CacheMode="BitmapCache"
+                       Visibility="{Binding IsGifLoading, Converter={StaticResource InvertedBoolToVisibilityConverter}}" />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="4"  BorderBrush="#705448" BorderThickness="0 0 0 4">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" HorizontalAlignment="Left" Margin="20 10 0 10" Width="475" Grid.ColumnSpan="2">
+                        <TextBlock Text="🔹 Edit book" FontSize="28"
+                       Style="{StaticResource TextShelvesMainStyle}" FontWeight="Bold"/>
+                        <TextBlock Text="1. Go to the Books section."
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="2. Click on the book."
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="3. Modify the necessary fields." TextWrapping="Wrap"
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="4. To select genres, click the cross and choose the desired genres from the list." TextWrapping="Wrap"
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="5. Rate the book by clicking on the stars." TextWrapping="Wrap"
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="6. Click the checkmark to save changes or cancel them by clicking the cross."
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20" MaxWidth="468" TextWrapping="Wrap"/>
+                        <TextBlock Text="7. If needed, the book can be deleted."
+                       Style="{StaticResource TextShelvesSecondStyle}" FontSize="20" MaxWidth="468" TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <Border Grid.Column="1" BorderBrush="#B0C2DB" VerticalAlignment="Center" BorderThickness="3" CornerRadius="12" Width="335" Height="173">
+                        <Grid>
+                            <!-- Placeholder during loading -->
+                            <TextBlock Text="Loading GIF..." FontSize="16"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Visibility="{Binding IsGifLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                            <!-- GIF image -->
+                            <Image Width="310" Height="160"                      
+                       gif:AnimationBehavior.SourceUri="{Binding GifEditBook}"
+                       RenderOptions.BitmapScalingMode="LowQuality"
+                       CacheMode="BitmapCache"
+                       Visibility="{Binding IsGifLoading, Converter={StaticResource InvertedBoolToVisibilityConverter}}" />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+
+
+            <Border Grid.Row="5"  BorderBrush="#705448" BorderThickness="0 0 0 4">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="475" Margin="20,10,0,10" Grid.ColumnSpan="2">
+                        <TextBlock Text="🔹 Notes Management" FontSize="28" Style="{StaticResource TextShelvesMainStyle}" FontWeight="Bold"/>
+                        <TextBlock Text="1. A note is added to a reading session."
+            Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="2. After being added, the note is displayed in the book information."
+            Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="3. When a reading session is deleted, its associated notes are also deleted." TextWrapping="Wrap"
+            Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                        <TextBlock Text="4. Notes from other sessions remain."
+            Style="{StaticResource TextShelvesSecondStyle}" FontSize="20"/>
+                    </StackPanel>
+
+                    <Border Grid.Column="1" BorderBrush="#B0C2DB" VerticalAlignment="Center" BorderThickness="3" CornerRadius="12" Width="335" Height="173">
+                        <Grid>
+                            <!-- Placeholder during loading -->
+                            <TextBlock Text="Loading GIF..." FontSize="16"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Visibility="{Binding IsGifLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                            <!-- GIF image -->
+                            <Image Width="310" Height="160"                      
+            gif:AnimationBehavior.SourceUri="{Binding GifNotes}"
+            RenderOptions.BitmapScalingMode="LowQuality"
+            CacheMode="BitmapCache"
+            Visibility="{Binding IsGifLoading, Converter={StaticResource InvertedBoolToVisibilityConverter}}" />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

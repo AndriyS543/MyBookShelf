@@ -56,6 +56,17 @@ namespace MyBookShelf.ViewModel
             }
         }
 
+        private bool _isInfoChecked;
+        public bool IsInfoChecked
+        {
+            get => _isInfoChecked;
+            set
+            {
+                _isInfoChecked = value;
+                OnPropertyChanged();
+            }
+        }
+
         // Stack to store navigation history
         private readonly Stack<object> _viewHistory = new();
 
@@ -78,6 +89,7 @@ namespace MyBookShelf.ViewModel
                 IsBooksChecked = CurrentView is BooksMainViewModel || CurrentView is SelectedBookViewModel;
                 IsShelvesChecked = CurrentView is ShelvesViewModel;
                 IsReadingChecked = CurrentView is ReadingMainViewModel || CurrentView is SelectedBookToReadViewModel;
+                IsInfoChecked = CurrentView is InfoViewModel;
             }
         }
 
@@ -90,6 +102,7 @@ namespace MyBookShelf.ViewModel
 
         public ICommand ReadingCommand { get; set; }
 
+        public ICommand InfoCommand { get; set; }
         public ICommand GoBackCommand { get; }
 
         // Methods to handle navigation to different sections
@@ -98,7 +111,8 @@ namespace MyBookShelf.ViewModel
 
         private void Reading(object obj) => CurrentView = new ReadingMainViewModel(this, _creator, _shelfProvider, _bookProviders, _bookGenreProviders, _genreProviders);
 
-        
+        private void Info(object obj) => CurrentView = new InfoViewModel();
+
         // Command for navigating from BooksMain to SelectedBook
         public ICommand OpenSelectedBookCommand { get; }
         private void OpenSelectedBook(object obj)
@@ -125,6 +139,7 @@ namespace MyBookShelf.ViewModel
             BooksCommand = new RelayCommand(BooksMain);
             ShelvesCommand = new RelayCommand(Shelves);
             ReadingCommand = new RelayCommand(Reading);
+            InfoCommand = new RelayCommand(Info);
 
             _shelfProvider = shelfProviders;
             _bookProviders = bookProviders;
@@ -142,7 +157,8 @@ namespace MyBookShelf.ViewModel
 
             //For ReadingMain -> selectedBookToRead
             OpenSelectedBookToReadCommand = new RelayCommand(OpenSelectedBookToRead);
-            
+
+
             // Set initial page to BooksMainViewModel
             CurrentView = new BooksMainViewModel(this,_creator, _shelfProvider, _bookProviders, _bookGenreProviders, _genreProviders);
         }

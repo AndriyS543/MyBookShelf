@@ -13,9 +13,15 @@
     <None Remove="Images\img_back.png" />
     <None Remove="Images\img_books.png" />
     <None Remove="Images\img_close.png" />
+    <None Remove="Images\img_info.png" />
     <None Remove="Images\img_minimize.png" />
     <None Remove="Images\img_reading.png" />
     <None Remove="Images\img_shelves.png" />
+    <None Remove="Images\Info\tutorial_add_book.gif" />
+    <None Remove="Images\Info\tutorial_create_shelf.gif" />
+    <None Remove="Images\Info\tutorial_edit_book.gif" />
+    <None Remove="Images\Info\tutorial_notes.gif" />
+    <None Remove="Images\Info\tutorial_reading_session.gif" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,15 +36,23 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
+    <PackageReference Include="XamlAnimatedGif" Version="2.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Images\img_back.png" />
     <Resource Include="Images\img_books.png" />
     <Resource Include="Images\img_close.png" />
+    <Resource Include="Images\img_info.png" />
     <Resource Include="Images\img_minimize.png" />
     <Resource Include="Images\img_reading.png" />
     <Resource Include="Images\img_shelves.png" />
+    <Resource Include="Images\Info\tutorial_add_book.gif" />
+    <Resource Include="Images\Info\tutorial_create_shelf.gif" />
+    <Resource Include="Images\Info\tutorial_edit_book.gif" />
+    <Resource Include="Images\Info\tutorial_notes.gif" />
+    <Resource Include="Images\Info\tutorial_reading_session.gif" />
   </ItemGroup>
 
   <ItemGroup>

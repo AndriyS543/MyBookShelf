@@ -34,4 +34,8 @@
     <DataTemplate DataType="{x:Type vm:ReadingBookViewModel}">
         <view:ReadingBook />
     </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type vm:InfoViewModel}">
+        <view:Info />
+    </DataTemplate>
 </ResourceDictionary>

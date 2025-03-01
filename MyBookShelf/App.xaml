@@ -22,6 +22,7 @@
             <converters:BoolToTextDecorationConverter x:Key="BoolToTextDecorationConverter"/>
             <converters:BoolToTextColorConverter x:Key="BoolToTextColorConverter"/>
             <converters:RowNumberConverter x:Key="RowNumberConverter"/>
+            <converters:InvertedBoolToVisibilityConverter x:Key="InvertedBoolToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

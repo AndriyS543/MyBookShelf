@@ -64,6 +64,14 @@
                                 <TextBlock Text="Reading" Style="{StaticResource Text_Style}" />
                             </Grid>
                         </Menu:Btn>
+                        <Menu:Btn Style="{StaticResource BtnStyle}" 
+                                  IsChecked="{Binding IsInfoChecked, Mode=OneWay}"
+                                  Command="{Binding InfoCommand}">
+                            <Grid>
+                                <Image Source="Images/img_info.png" Style="{StaticResource Image_Style}" />
+                                <TextBlock Text="Info" Style="{StaticResource Text_Style}" />
+                            </Grid>
+                        </Menu:Btn>
                     </StackPanel>
 
 
