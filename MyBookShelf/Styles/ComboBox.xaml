@@ -17,22 +17,32 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
                     <Grid>
-                        <Border Name="Border">
-                            <ContentPresenter Name="ContentSite"
-                                      IsHitTestVisible="True"
-                                      HorizontalAlignment="Center"
-                                      Content="{TemplateBinding SelectionBoxItem}"
-                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"/>
-                            
+                        <Border Name="Border" BorderThickness="2" BorderBrush="#B0C2DB" CornerRadius="16">                         
+                            <Grid>
+                                <ContentPresenter Name="ContentSite"
+                                                  IsHitTestVisible="True"
+                                                  HorizontalAlignment="Center"
+                                                  Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"/>    
+                                <!-- Стрілочка вниз -->
+                                <Path 
+                                    Data="M 0 0 L 10 10 L 20 0"
+                                    Stroke="#B0C2DB"
+                                    StrokeThickness="2"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Margin="0 0 8 0">                        
+                                </Path>
+                            </Grid>
                         </Border>
+
 
                         <!-- ToggleButton -->
                         <ToggleButton Name="ToggleButton"
                               Background="Transparent"
                               FocusVisualStyle="{x:Null}"
                               ClickMode="Press"
-                              IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                              BorderThickness="0">
+                              IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                             <ToggleButton.Style>
                                 <Style TargetType="ToggleButton">
                                     <Setter Property="Template">
@@ -91,6 +101,11 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="#C7B1A7"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 

@@ -25,7 +25,7 @@
                            Text="{Binding tbBookTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                            FontSize="36" 
                            Foreground="#B0C2DB"
-                           HorizontalAlignment="Center"
+                           HorizontalAlignment="Left"
                            Margin="29,0"
                            FontFamily="Josefin Sans"/>
 
@@ -96,7 +96,7 @@
 
 
                 <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center">
-                    <Button Content="Start page"
+                    <Button Content="Start reading"
                             Style="{StaticResource ShelfButton}"
                             Height="44"
                             Width="210"

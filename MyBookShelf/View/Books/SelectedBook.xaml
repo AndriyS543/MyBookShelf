@@ -49,33 +49,45 @@
                     <StackPanel Grid.Column="1" Margin="10 0 0 0">
 
                         <!-- Title input -->
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0" Height="32">
-                            <TextBlock Text="Title:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0" Height="40">
+                            <TextBlock Text="Title:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30" Height="35" Padding="0 4 0 0"/>
                             <TextBox Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                      Style="{StaticResource ShelfTextBoxStyle}" 
                                      Padding="0,10,0,0" 
                                      VerticalAlignment="Center" 
-                                     Margin="11,3,0,0"/>
+                                     Margin="11,3,0,0"
+                                     BorderBrush="#C7B1A7"
+                                     BorderThickness="0,0,0,2" 
+                                     Height="37" 
+                                     MaxWidth="464"
+                                     Width="Auto"
+                                     MinWidth="20"/>
                         </StackPanel>
 
                         <!-- Author input -->
-                        <StackPanel Orientation="Horizontal" Margin="0,9,0,9">
-                            <TextBlock Text="Author:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,6,0,9" Height="44">
+                            <TextBlock Text="Author:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30" Height="34" Padding="0 1 0 0 "/>
                             <TextBox Text="{Binding Author, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                      Style="{StaticResource ShelfTextBoxStyle}"
                                      Padding="0,10,0,0" 
                                      VerticalAlignment="Center"
-                                     Margin="11,3,0,0"/>
+                                     Margin="11,3,0,0"
+                                     BorderBrush="#C7B1A7"
+                                     BorderThickness="0,0,0,2"    
+                                     Width="auto"
+                                     MinWidth="20"
+                                     MaxWidth="429"
+                                     Height="37"/>
                         </StackPanel>
 
                         <!-- Genre selection -->
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,1">
-                            <TextBlock Text="Genre:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30" VerticalAlignment="Center"/>
+                            <TextBlock Text="Genre:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30" VerticalAlignment="Top"/>
                             
                             <TextBox Text="{Binding Genre, Mode=TwoWay}"
                                      Style="{StaticResource ShelfTextBoxStyle}" 
                                      VerticalAlignment="Center" 
-                                     Padding="0,10,0,0" 
+                                     Padding="0,2,0,0" 
                                      Margin="11,3,0,0"
                                      IsReadOnly="True"
                                      TextWrapping="Wrap" 
@@ -86,18 +98,22 @@
                                     Command="{Binding AddGenreCommand}"
                                     Width="30" Height="30" 
                                     Margin="5,0,0,0"
-                                    VerticalAlignment="Center"
+                                    VerticalAlignment="top"
                                     Style="{StaticResource ShelfButton}"/>
                         </StackPanel>
 
                         <!-- Page count input -->
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,17">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,17" Height="44">
                             <TextBlock Text="Page:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
                             <TextBox Text="{Binding PageCountText, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, NotifyOnValidationError=True}"
                                      Style="{StaticResource ShelfTextBoxStyle}" 
                                      Padding="0,10,0,0" 
-                                     VerticalAlignment="Center" 
-                                     Margin="11,3,0,0"/>
+                                     VerticalAlignment="Center"
+                                     MinWidth="20"
+                                     Width="auto"
+                                     BorderBrush="#C7B1A7"
+                                     BorderThickness="0,0,0,2"
+                                     Margin="11,3,0,0" Height="37"/>
                         </StackPanel>
 
                         <!-- Book rating -->
@@ -168,8 +184,11 @@
                                  Text="{Binding BookDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="0"
                                  Width="Auto"
-                                 Height="101"
+                                 MaxHeight="101"
                                  Padding="0,5,0,0"
+                                 BorderBrush="#C7B1A7"
+                                 BorderThickness="3 0 0 0"
+                                 Height="auto"
                                  TextWrapping="Wrap"
                                  AcceptsReturn="True"
                                  MaxLength="700"
@@ -182,10 +201,15 @@
                         <TextBox Style="{StaticResource ShelfTextBoxStyle}" 
                                  Text="{Binding BookNotes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="0"
+                                 
                                  Width="Auto"
-                                 Height="64.35"
+                                 MinHeight="0"
+                                 MaxHeight="64.35"
                                  Padding="0,5,0,0"
                                  TextWrapping="Wrap"
+                                 BorderBrush="#C7B1A7"
+                                 BorderThickness="3 0 0 0"
+                                 Height="auto"
                                  AcceptsReturn="True"
                                  VerticalScrollBarVisibility="Hidden"
                                  IsReadOnly="True"/>

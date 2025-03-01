@@ -70,7 +70,7 @@
                                  Padding="0,14,0,0"
                                  Foreground="#3D2012"
                                  Width="295"
-                                 Text="{Binding tbCountPage, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding tbCountPage, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
                     </StackPanel>
 
                     <!-- Genre selection section -->

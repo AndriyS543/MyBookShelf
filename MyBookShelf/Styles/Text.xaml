@@ -53,8 +53,7 @@
         <Setter Property="HorizontalAlignment"  Value="Left" />
         <Setter Property="Foreground" Value="#B0C2DB" />
         <Setter Property="FontSize" Value="32" />
-        <Setter Property="Margin" Value="0,0,0,0" />
-        <Setter Property="TextDecorations"  Value="Underline" />
+        <Setter Property="Margin" Value="0,0,0,0" /> 
     </Style>
 
     <Style TargetType="TextBox" x:Key="DataGridEditingTextBoxStyle">

@@ -112,7 +112,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <!-- Page Start -->
-                <StackPanel  Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="136,9,0,0" Height="34">
+                <StackPanel  Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="80,9,0,0" Height="34">
                     <TextBlock Text="Page Start" Style="{StaticResource TextSelectedBookMainStyle}" TextDecorations="None"  FontSize="25" Height="34"/>
                     <TextBox Text="{Binding tbPageStartText, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, NotifyOnValidationError=True}"
                              Style="{StaticResource ShelfTextBoxStyle}"
@@ -120,19 +120,24 @@
                              Foreground="#3D2012"
                              Height="34"
                              FontSize="25"
-                             Margin="11,0,0,0" Width="85"/>
+                             Margin="11,0,0,0" Width="88"
+                             BorderThickness="2"
+                             BorderBrush="#3D2012"/>
                 </StackPanel>
 
                 <!-- End Start -->
                 <StackPanel  Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top"  HorizontalAlignment="Center" Margin="0,9,0,9" Height="34">
-                    <TextBlock Text="Page Start" Style="{StaticResource TextSelectedBookMainStyle}" TextDecorations="None" FontSize="25" Height="34"/>
+                    <TextBlock Text="Page End:" Style="{StaticResource TextSelectedBookMainStyle}" TextDecorations="None" FontSize="25" Height="34"/>
                     <TextBox Text="{Binding tbPageFinishText, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, NotifyOnValidationError=True}"
                              Style="{StaticResource ShelfTextBoxStyle}"
                              Height="34"
                              FontSize="25"
                              Foreground="#3D2012"
                              VerticalAlignment="Center"
-                             Margin="11,0,0,0" Width="79"/>
+                             Margin="11,0,0,0" Width="88"
+                             BorderThickness="2"
+                             BorderBrush="#3D2012"
+                             />
                 </StackPanel>
             </Grid>
         </Border>

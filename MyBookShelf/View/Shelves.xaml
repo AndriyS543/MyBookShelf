@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Border Grid.Row="0" CornerRadius="5" Margin="0,0,0,13" Height="48" Width="304" HorizontalAlignment="Left">
+        <Border Grid.Row="0" CornerRadius="5" Margin="0,0,0,13" Height="60" Width="324" HorizontalAlignment="Left">
             <ComboBox ItemsSource="{Binding Shelves}" 
                       SelectedItem="{Binding SelectedShelf}"
                       HorizontalAlignment="Center"
@@ -50,13 +50,15 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Name:" Style="{StaticResource TextShelvesMainStyle}"/>
                         <TextBox Style="{StaticResource ShelfTextBoxStyle}"
+                                 BorderBrush="#C7B1A7"
+                                 BorderThickness="0,0,0,2"
                                  Padding="0,14,0,0"  
                                  Text="{Binding tbShelfName, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
                         <TextBlock Text="Count of books:" Style="{StaticResource TextShelvesMainStyle}"/>
-                        <TextBlock Style="{StaticResource TextShelvesSecondStyle}" Text="{Binding tbCountBooks}"/>
+                        <TextBlock Style="{StaticResource TextShelvesSecondStyle}" Text="{Binding tbCountBooks}" Padding="0 0 0 4"/>
                     </StackPanel>
 
                 </StackPanel>
@@ -95,10 +97,13 @@
                 <TextBlock Text="Desctiption" Style="{StaticResource TextShelvesMainStyle}"/>
                 <TextBox Style="{StaticResource ShelfTextBoxStyle}" 
                          Text="{Binding tbShelfDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Margin="0"
+                         Margin="0 5 0 0"
                          Width="Auto"
-                         Height="267.5"
-                         Padding="0,10,0,0"
+                         BorderBrush="#C7B1A7"
+                         BorderThickness="3 0 0 0"
+                         Height="auto"
+                         MaxHeight="267"
+                         Padding="5,10,0,0"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"
                          VerticalScrollBarVisibility="Hidden"/>
@@ -106,7 +111,7 @@
         </Border>
 
         <!-- Buttons -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,0"
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0"
                     Visibility="{Binding IsShelfContentChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Button Content="✔️"
                     Width="102" 

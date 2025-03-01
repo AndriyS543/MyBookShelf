@@ -13,13 +13,20 @@
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Margin" Value="12,0,0,0" />
 
-
-
         <Style.Triggers>
-            <Trigger Property="IsFocused" Value="True">
-                <Setter Property="Text" Value="" />
+            <!-- При наведенні мишкою рамка стає золотою -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="Gold"/>
+            </Trigger>
+
+            <!-- Якщо користувач вводить текст, рамка стає сірою -->
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="BorderBrush" Value="Gray"/>
             </Trigger>
         </Style.Triggers>
+
     </Style>
+
+
 
 </ResourceDictionary>
