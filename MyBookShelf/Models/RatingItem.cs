@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyBookShelf.Models
+﻿namespace MyBookShelf.Models
 {
+    // Represents a rating item with a number and a value.
     public class RatingItem
     {
         public int Number { get; set; }

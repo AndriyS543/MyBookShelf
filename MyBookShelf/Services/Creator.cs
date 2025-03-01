@@ -1,17 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MyBookShelf.Models;
+﻿using MyBookShelf.Models;
 using MyBookShelf.Repositories.BookRroviders;
 using MyBookShelf.Repositories.ReadingSessionProviders;
 using MyBookShelf.Repositories.ShelfProviders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyBookShelf.Services
 {
-
     public class Creator : ICreator
     {
         public readonly IShelfProviders _shelfProviders;
@@ -48,10 +41,7 @@ namespace MyBookShelf.Services
                 Rating = rating,
                 IdShelf = shelfId, 
             };
-
-           
             await _bookProviders.AddAsync(book);
-
             return book;
         }
 
@@ -61,13 +51,11 @@ namespace MyBookShelf.Services
             {
                 IdBook = idBook,
                 ReadingTime = readingTime,
- 
                 StartPage = startPage,
                 FinishPage = finishPage,
                 FinishPercent = finishPercent
             };
             await _readingSessionProviders.AddAsync(readingSession);
-
             return readingSession;
         }
     }

@@ -1,5 +1,5 @@
 ﻿using System.Windows.Input;
-using Learning_Words.Utilities;
+using MyBookShelf.Utilities;
 using MyBookShelf.Repositories.BookGenreRroviders;
 using MyBookShelf.Repositories.BookRroviders;
 using MyBookShelf.Repositories.GenreRroviders;
@@ -7,12 +7,13 @@ using MyBookShelf.Repositories.NoteProviders;
 using MyBookShelf.Repositories.ReadingSessionProviders;
 using MyBookShelf.Repositories.ShelfProviders;
 using MyBookShelf.Services;
-using MyBookShelf.View;
+
 
 namespace MyBookShelf.ViewModel
 {
     public class NavigationViewModel : ViewModelBase
     {
+        // Dependencies for data management
         private readonly IShelfProviders _shelfProvider;
         private readonly IBookProviders _bookProviders;
         private readonly IBookGenreProviders _bookGenreProviders;
@@ -21,6 +22,7 @@ namespace MyBookShelf.ViewModel
         private readonly INoteProviders _noteProviders;
         private readonly ICreator _creator;
 
+        // State properties to track UI navigation status
         private bool _isBooksChecked;
         public bool IsBooksChecked
         {
@@ -54,14 +56,17 @@ namespace MyBookShelf.ViewModel
             }
         }
 
+        // Stack to store navigation history
         private readonly Stack<object> _viewHistory = new();
 
+        // Property to manage the currently displayed view
         private object? _currentView;
         public object? CurrentView
         {
             get { return _currentView; }
             set
             {
+                // Save current view in history before switching (if not going back)
                 if (_currentView != null && !_isGoingBack)
                     _viewHistory.Push(_currentView);
 
@@ -69,27 +74,32 @@ namespace MyBookShelf.ViewModel
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(CanGoBack));
 
+                // Update navigation indicators based on the selected view
                 IsBooksChecked = CurrentView is BooksMainViewModel || CurrentView is SelectedBookViewModel;
                 IsShelvesChecked = CurrentView is ShelvesViewModel;
                 IsReadingChecked = CurrentView is ReadingMainViewModel || CurrentView is SelectedBookToReadViewModel;
             }
         }
 
-        private bool _isGoingBack = false;
-        public bool CanGoBack => _viewHistory.Count > 0;
+        private bool _isGoingBack = false; // Flag to prevent storing history when going back
+        public bool CanGoBack => _viewHistory.Count > 0; // Determines if back navigation is possible
 
+        // Commands for UI navigation
         public ICommand BooksCommand { get; set; }
         public ICommand ShelvesCommand { get; set; }
 
         public ICommand ReadingCommand { get; set; }
 
-        public ICommand GoBackCommand { get; } 
+        public ICommand GoBackCommand { get; }
+
+        // Methods to handle navigation to different sections
         private void BooksMain(object obj) => CurrentView = new BooksMainViewModel(this,_creator, _shelfProvider, _bookProviders, _bookGenreProviders, _genreProviders);
         private void Shelves(object obj) => CurrentView = new ShelvesViewModel(_creator,_shelfProvider);
 
         private void Reading(object obj) => CurrentView = new ReadingMainViewModel(this, _creator, _shelfProvider, _bookProviders, _bookGenreProviders, _genreProviders);
 
-        // BooksMain --> SelectedBook 
+        
+        // Command for navigating from BooksMain to SelectedBook
         public ICommand OpenSelectedBookCommand { get; }
         private void OpenSelectedBook(object obj)
         {
@@ -98,7 +108,6 @@ namespace MyBookShelf.ViewModel
                 CurrentView = new SelectedBookViewModel(IdBook,this, _bookProviders, _bookGenreProviders, _genreProviders,_noteProviders);
             }
         }
-
 
         // ReadingMain --> SelectedBookReading
         public ICommand OpenSelectedBookToReadCommand { get; }
@@ -110,6 +119,7 @@ namespace MyBookShelf.ViewModel
             }
         }
 
+        // Constructor initializes dependencies and sets up commands
         public NavigationViewModel(ICreator creator, IShelfProviders shelfProviders, IBookProviders bookProviders,IBookGenreProviders bookGenreProviders, IGenreProviders genreProviders,IReadingSessionProviders readingSessionProviders,INoteProviders noteProviders)
         {
             BooksCommand = new RelayCommand(BooksMain);
@@ -124,19 +134,20 @@ namespace MyBookShelf.ViewModel
             _noteProviders = noteProviders;
             _creator = creator;
 
+            // Command to navigate back
             GoBackCommand = new RelayCommand(GoBack, _ => _viewHistory.Count > 0);
 
-            //For selectedBook
+            // Command for opening a selected book
             OpenSelectedBookCommand = new RelayCommand(OpenSelectedBook);
 
             //For ReadingMain -> selectedBookToRead
             OpenSelectedBookToReadCommand = new RelayCommand(OpenSelectedBookToRead);
-
-
-            // Startup Page
+            
+            // Set initial page to BooksMainViewModel
             CurrentView = new BooksMainViewModel(this,_creator, _shelfProvider, _bookProviders, _bookGenreProviders, _genreProviders);
         }
 
+        // Handles back navigation logic
         private void GoBack(object obj)
         {
             if (_viewHistory.Count > 0)

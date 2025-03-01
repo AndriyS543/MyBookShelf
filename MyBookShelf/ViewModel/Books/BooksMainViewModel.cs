@@ -1,5 +1,4 @@
-﻿using Learning_Words.Utilities;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using MyBookShelf.Models;
@@ -9,6 +8,7 @@ using MyBookShelf.Repositories.GenreRroviders;
 using MyBookShelf.Repositories.ShelfProviders;
 using MyBookShelf.Services;
 using MyBookShelf.View;
+using MyBookShelf.Utilities;
 namespace MyBookShelf.ViewModel
 {
     public class BooksMainViewModel : ViewModelBase
@@ -26,7 +26,7 @@ namespace MyBookShelf.ViewModel
         public ObservableCollection<Book> Books { get; } = new ObservableCollection<Book>();
         public ObservableCollection<Book> FilteredBooks { get; } = new ObservableCollection<Book>();
 
-        private Shelf _selectedShelf;
+        private Shelf _selectedShelf = new Shelf();
         public Shelf SelectedShelf
         {
             get => _selectedShelf;
@@ -77,7 +77,7 @@ namespace MyBookShelf.ViewModel
                 Shelves.Add(new Shelf { Name = "My Book Shelf", IdShelf = -1, Books = allBooks });
                 if (shelves.Any())
                 {
-                    
+
                     foreach (var shelf in shelves)
                     {
                         Shelves.Add(shelf);
@@ -97,10 +97,10 @@ namespace MyBookShelf.ViewModel
             }
             catch (Exception ex)
             {
+                Console.Write(ex);
                 // Log or handle exception if needed
             }
         }
-
 
         /// <summary>
         /// Updates the filtered book collection based on the selected shelf.
@@ -142,10 +142,10 @@ namespace MyBookShelf.ViewModel
             }
             catch (Exception ex)
             {
+                Console.Write(ex);
                 // Log or handle exception if needed
             }
         }
-
 
         /// <summary>
         /// Handles book click events.
@@ -169,6 +169,7 @@ namespace MyBookShelf.ViewModel
             }
             catch (Exception ex)
             {
+                Console.Write(ex);
                 // Log or handle exception if needed
             }
         }

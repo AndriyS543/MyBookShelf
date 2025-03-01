@@ -6,5 +6,4 @@
     <Color x:Key="BlueColor">#B0C2DB</Color>
     <Color x:Key="LightBrownColor">#705448</Color>
 
-
 </ResourceDictionary>

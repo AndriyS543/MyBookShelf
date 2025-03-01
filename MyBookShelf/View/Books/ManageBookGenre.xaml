@@ -60,7 +60,7 @@
                     <Button Content="✔️" Width="124" Style="{StaticResource ShelfButton}" Command="{Binding CommitCommand}"  />
 
                     <!-- Cancel button -->
-                    <Button Content="✖️" Width="124"  Margin="44 0 0 0" Style="{StaticResource ShelfButton}" Click="CloseApp_Click"  />
+                    <Button Content="✖️" Width="124" Margin="44 0 0 0" Style="{StaticResource ShelfButton}" Click="CloseApp_Click"  />
                 </StackPanel>
             </StackPanel>
         </Border>

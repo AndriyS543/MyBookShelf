@@ -1,5 +1,4 @@
-﻿<!-- Main window definition -->
-<Window x:Class="MyBookShelf.View.ReadingBook"
+﻿<Window x:Class="MyBookShelf.View.ReadingBook"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -62,7 +61,7 @@
                                  Margin="11,0,0,0"
                                  IsReadOnly="True" 
                                  Height="28" Width="452"/>
-                        
+
                     </StackPanel>
 
                     <!-- Author input -->
@@ -76,7 +75,6 @@
                                  Margin="11,0,0,0" Height="28" Width="417"/>
                     </StackPanel>
 
-
                     <!-- Page count input -->
                     <StackPanel Orientation="Horizontal" Margin="0,17,0,17" Height="32">
                         <TextBlock Text="Page:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
@@ -85,13 +83,9 @@
                                  VerticalAlignment="Center"
                                  Foreground="#3D2012"
                                  IsReadOnly="True" 
-                                 Margin="11,0,0,0" Height="34" Width="444"/>     
+                                 Margin="11,0,0,0" Height="34" Width="444"/>
                     </StackPanel>
-
-
                 </StackPanel>
-
-
             </Grid>
         </Border>
 
@@ -136,8 +130,7 @@
                              VerticalAlignment="Center"
                              Margin="11,0,0,0" Width="88"
                              BorderThickness="2"
-                             BorderBrush="#3D2012"
-                             />
+                             BorderBrush="#3D2012"/>
                 </StackPanel>
             </Grid>
         </Border>

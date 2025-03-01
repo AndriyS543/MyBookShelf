@@ -1,7 +1,7 @@
-﻿using Learning_Words.Utilities;
-using MyBookShelf.Models;
+﻿using MyBookShelf.Models;
 using MyBookShelf.Repositories.ShelfProviders;
 using MyBookShelf.Services;
+using MyBookShelf.Utilities;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -9,11 +9,14 @@ namespace MyBookShelf.ViewModel
 {
     public class ShelvesViewModel : ViewModelBase
     {
+        // Services for data access
         private readonly IShelfProviders _shelfProvider;
         private readonly ICreator _creator;
 
+        // Collection for UI binding
         public ObservableCollection<Shelf> Shelves { get; set; } = new ObservableCollection<Shelf>();
 
+        // Commands for UI interactions
         public ICommand AddNewShelfCommand { get; }
         public ICommand DeleteShelfCommand { get; }
         public ICommand CancelChangesShelfCommand { get; }
@@ -21,7 +24,7 @@ namespace MyBookShelf.ViewModel
         public ICommand YesDeleteShelfCommand { get; }
         public ICommand NoDeleteShelfCommand { get; }
 
-        private Shelf _selectedShelf;
+        private Shelf _selectedShelf = new Shelf();
         public Shelf SelectedShelf
         {
             get => _selectedShelf;
@@ -30,12 +33,12 @@ namespace MyBookShelf.ViewModel
                 if (_selectedShelf != value)
                 {
                     _selectedShelf = value;
-                    UpdateShelfDetails();
+                    UpdateShelfDetails(); // Update UI details when shelf changes
                 }
             }
         }
 
-        private string _tbShelfName;
+        private string _tbShelfName = "";
         public string tbShelfName
         {
             get => _tbShelfName;
@@ -45,12 +48,12 @@ namespace MyBookShelf.ViewModel
                 {
                     _tbShelfName = value;
                     OnPropertyChanged(nameof(tbShelfName));
-                    CheckShelfContentChanged();
+                    CheckShelfContentChanged(); // Track content changes
                 }
             }
         }
 
-        private string _tbShelfDescription;
+        private string _tbShelfDescription = "";
         public string tbShelfDescription
         {
             get => _tbShelfDescription;
@@ -134,18 +137,21 @@ namespace MyBookShelf.ViewModel
             YesDeleteShelfCommand = new AsyncRelayCommand(ConfirmDeleteShelfAsync);
             NoDeleteShelfCommand = new RelayCommand(CancelDeleteShelf);
 
-            LoadShelvesAsync();
+            _ = LoadShelvesAsync(); // Load shelves on initialization
         }
 
-        // Loads shelves from the data source and initializes default values
+        /// <summary>
+        /// Loads shelves from the data source and initializes default values.
+        /// </summary>
         private async Task LoadShelvesAsync()
         {
             Shelves.Clear();
             var shelves = await _shelfProvider.GetAllAsync();
             var descriptionMyBookShelf = "A collection that contains all books across different shelves.";
+
             if (!shelves.Any()) // If no shelves exist, add a default one
             {
-                Shelves.Add(new Shelf { Name = "My Book Shelf", IdShelf = -1, Books = new List<Book>() ,Description= descriptionMyBookShelf });
+                Shelves.Add(new Shelf { Name = "My Book Shelf", IdShelf = -1, Books = new List<Book>(), Description = descriptionMyBookShelf });
             }
             else
             {
@@ -155,7 +161,7 @@ namespace MyBookShelf.ViewModel
                 foreach (var shelf in shelves) Shelves.Add(shelf);
             }
 
-            SelectedShelf = Shelves.FirstOrDefault(); // Select the first shelf by default
+            SelectedShelf = Shelves[0]; // Select the first shelf by default
         }
 
         // Reloads the shelves and selects a specific shelf
@@ -165,21 +171,27 @@ namespace MyBookShelf.ViewModel
             SelectedShelf = Shelves.FirstOrDefault(s => s.IdShelf == newShelf?.IdShelf) ?? Shelves.First();
         }
 
-        // Adds a new shelf asynchronously
+        /// <summary>
+        /// Adds a new shelf asynchronously.
+        /// </summary>
         private async Task AddNewShelfAsync()
         {
             var newShelf = await _creator.CreateShelfAsync($"New shelf {Shelves.Count}", "");
             await ReloadShelvesAsync(newShelf);
         }
 
-        // Initiates shelf deletion process
+        /// <summary>
+        /// Initiates shelf deletion process.
+        /// </summary>
         private void DeleteShelf(object obj)
         {
             IsDeleteShelfButton = false;
             IsDeleteShelf = true;
         }
 
-        // Cancels shelf changes and restores original values
+        /// <summary>
+        /// Cancels shelf changes and restores original values.
+        /// </summary>
         private void CancelShelfChanges(object obj)
         {
             if (SelectedShelf != null)
@@ -189,7 +201,9 @@ namespace MyBookShelf.ViewModel
             }
         }
 
-        // Commits changes made to the selected shelf
+        /// <summary>
+        /// Commits changes made to the selected shelf.
+        /// </summary>
         private async Task CommitShelfChangesAsync()
         {
             if (!string.IsNullOrWhiteSpace(tbShelfName) && SelectedShelf != null)
@@ -200,19 +214,23 @@ namespace MyBookShelf.ViewModel
             }
         }
 
-        // Confirms and deletes the selected shelf
+        /// <summary>
+        /// Confirms and deletes the selected shelf.
+        /// </summary>
         private async Task ConfirmDeleteShelfAsync()
         {
-            if (SelectedShelf?.IdShelf != -1)
+            if (SelectedShelf?.IdShelf != -1 && SelectedShelf != null)
             {
                 await _shelfProvider.DeleteAsync(SelectedShelf);
-                LoadShelvesAsync();
+                _ = LoadShelvesAsync();
             }
             IsDeleteShelfButton = true;
             IsDeleteShelf = false;
         }
 
-        // Cancels the deletion process
+        /// <summary>
+        /// Cancels the deletion process.
+        /// </summary>
         private void CancelDeleteShelf(object obj)
         {
             IsDeleteShelfButton = true;
@@ -227,7 +245,9 @@ namespace MyBookShelf.ViewModel
             IsShelfContentChanged = tbShelfName != SelectedShelf.Name || tbShelfDescription != SelectedShelf.Description;
         }
 
-        // Updates the details of the selected shelf
+        /// <summary>
+        /// Updates the details of the selected shelf.
+        /// </summary>
         private void UpdateShelfDetails()
         {
             tbShelfName = SelectedShelf?.Name ?? string.Empty;

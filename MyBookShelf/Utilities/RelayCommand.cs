@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace Learning_Words.Utilities
+namespace MyBookShelf.Utilities
 {
     // RelayCommand is a custom implementation of ICommand.
     // It is used to delegate command logic to methods passed as parameters and to manage command enabling.

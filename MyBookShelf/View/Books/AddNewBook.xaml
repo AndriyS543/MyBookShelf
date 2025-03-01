@@ -17,8 +17,7 @@
         <Border Background="#705448" CornerRadius="20">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <!-- Button for selecting an image -->
-                <Button Style="{StaticResource BookButtonStyle}"
-                        Command="{Binding SelectImageCommand}">
+                <Button Style="{StaticResource BookButtonStyle}" Command="{Binding SelectImageCommand}">
                     <Button.Background>
                         <!-- Display selected image or default image -->
                         <ImageBrush ImageSource="{Binding SelectedImagePath, Converter={StaticResource NullToImageConverter}}" Stretch="UniformToFill"/>

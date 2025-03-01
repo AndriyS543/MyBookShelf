@@ -1,5 +1,4 @@
-﻿using Learning_Words.Utilities;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using MyBookShelf.Models;
 using MyBookShelf.Repositories.BookGenreRroviders;
@@ -9,7 +8,6 @@ using Microsoft.Win32;
 using MyBookShelf.Utilities;
 using System.IO;
 using MyBookShelf.View;
-using MyBookShelf.Repositories.ReadingSessionProviders;
 using MyBookShelf.Repositories.NoteProviders;
 namespace MyBookShelf.ViewModel
 {
@@ -54,7 +52,6 @@ namespace MyBookShelf.ViewModel
             get => _title;
             set { _title = value; OnPropertyChanged(); CheckBookContentChanged(); }
         }
-
         public string Author
         {
             get => _author;
@@ -81,7 +78,6 @@ namespace MyBookShelf.ViewModel
                 CheckBookContentChanged();
             }
         }
-
         public string SelectedImagePath
         {
             get => _selectedImagePath;
@@ -207,7 +203,6 @@ namespace MyBookShelf.ViewModel
             SelectedBook = await _bookProviders.GetByIdAsync(_bookID);
             LoadBookGenresAsync();
         }
-
         public async Task<string> GetAllNotesForBookAsync(int bookId)
         {
             var notes = await _noteProviders.GetNotesByBookIdAsync(bookId);
@@ -219,8 +214,6 @@ namespace MyBookShelf.ViewModel
 
             return string.Join("\n", numberedNotes);
         }
-
-
 
         /// <summary>
         /// Loads genres associated with the selected book.
@@ -419,8 +412,6 @@ namespace MyBookShelf.ViewModel
 
             SelectedImagePath = string.IsNullOrEmpty(result.imagePath) ? string.Empty : result.imagePath;
         }
-
-
 
         /// <summary>
         /// Saves the selected image file to a local directory.

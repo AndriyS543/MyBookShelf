@@ -3,17 +3,22 @@ using MyBookShelf.Repositories.GenreRroviders;
 
 namespace MyBookShelf.DatabaseInitializer
 {
+    /// <summary>
+    /// Provides methods to initialize the database with predefined genres.
+    /// </summary>
     public static class DbInitializer
     {
         public static async Task InitializeGenres(IGenreProviders genreProviders)
         {
-            // Перевірка наявності жанрів в базі даних
+            /// <summary>
+            /// Initializes the database with a predefined list of genres if none exist.
+            /// </summary>
             var existingGenres = await genreProviders.GetAllAsync();
 
-            // Якщо жанри ще не додані (список порожній)
+            // Check if genres already exist in the database
             if (!existingGenres.Any())
             {
-                // Список жанрів, які потрібно додати
+                // List of genres to be added
                 var genresToAdd = new List<Genre>
                 {
                     new Genre { Name = "Fantasy" },
@@ -40,8 +45,7 @@ namespace MyBookShelf.DatabaseInitializer
                     new Genre { Name = "War" }
                 };
 
-
-                // Додавання жанрів у базу даних
+                // Add genres to the database
                 foreach (var genre in genresToAdd)
                 {
                     await genreProviders.AddAsync(genre);

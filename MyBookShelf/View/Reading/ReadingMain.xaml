@@ -18,12 +18,12 @@
 
         <!-- ComboBox for selecting a bookshelf -->
         <ComboBox ItemsSource="{Binding Shelves}"
-              SelectedItem="{Binding SelectedShelf}"
-              HorizontalAlignment="Center"
-              VerticalAlignment="Top"
-              Margin="10"
-              Style="{StaticResource ComboBoxShelvesStyle}"
-              SelectedIndex="0">
+                  SelectedItem="{Binding SelectedShelf}"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Top"
+                  Margin="10"
+                  Style="{StaticResource ComboBoxShelvesStyle}"
+                  SelectedIndex="0">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <!-- Display shelf name inside ComboBox -->
@@ -47,8 +47,8 @@
                         <StackPanel Margin="5,10,5,10" HorizontalAlignment="Center">
                             <!-- Button representing a book cover -->
                             <Button Style="{StaticResource BookButtonStyle}"
-                                Command="{Binding DataContext.TemplateClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                CommandParameter="{Binding}">
+                                    Command="{Binding DataContext.TemplateClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                    CommandParameter="{Binding}">
 
                                 <!-- Display book cover image as button background -->
                                 <Button.Background>
@@ -57,21 +57,20 @@
 
                                 <!-- Display book title if image is not available -->
                                 <TextBlock Text="{Binding Title}"
-                                       FontSize="18"
-                                       Width="120"
-                                       Height="200"
-                                       Background="#705448"
-                                       Foreground="#C7B1A7"
-                                       TextAlignment="Center"
-                                       Padding="0 80 0 0"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Visibility="{Binding PathImg, Converter={StaticResource NullToVisibilityConverter}}"/>
+                                           FontSize="18"
+                                           Width="120"
+                                           Height="200"
+                                           Background="#705448"
+                                           Foreground="#C7B1A7"
+                                           TextAlignment="Center"
+                                           Padding="0 80 0 0"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding PathImg, Converter={StaticResource NullToVisibilityConverter}}"/>
                             </Button>
 
                             <!-- Book title under the book cover -->
-                            <TextBlock Style="{StaticResource BookTextStyle}"
-                                   Text="{Binding Title}"/>
+                            <TextBlock Style="{StaticResource BookTextStyle}" Text="{Binding Title}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

@@ -1,10 +1,7 @@
-﻿using Learning_Words.Utilities;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using MyBookShelf.Models;
 using MyBookShelf.Repositories.BookGenreRroviders;
-using MyBookShelf.Repositories.BookRroviders;
 using MyBookShelf.Repositories.GenreRroviders;
-using MyBookShelf.Repositories.ShelfProviders;
 using MyBookShelf.Services;
 using MyBookShelf.Utilities;
 using System.Collections.ObjectModel;
@@ -22,18 +19,17 @@ namespace MyBookShelf.ViewModel
         private readonly ICreator _creator;
 
         // Properties for book details
-        private int? _tbCountPage;
-        public string tbCountPage
+        private string? _tbCountPage;
+        public string? tbCountPage
         {
-            get => _tbCountPage?.ToString() ?? string.Empty;
+            get => _tbCountPage;
             set
             {
-                    if (int.TryParse(value, out int result))
-                        _tbCountPage = result;
-                    else
-                        _tbCountPage = null;
-       
-                    OnPropertyChanged(); // Notify UI of changes               
+                if (_tbCountPage != value)
+                {
+                    _tbCountPage = value;
+                    OnPropertyChanged(); // Notify UI of changes
+                }
             }
         }
 
@@ -46,7 +42,7 @@ namespace MyBookShelf.ViewModel
                 if (_tbBookAuthor != value)
                 {
                     _tbBookAuthor = value;
-                    OnPropertyChanged(); 
+                    OnPropertyChanged();
                 }
             }
         }
@@ -60,7 +56,7 @@ namespace MyBookShelf.ViewModel
                 if (_tbBookTitle != value)
                 {
                     _tbBookTitle = value;
-                    OnPropertyChanged(); 
+                    OnPropertyChanged();
                 }
             }
         }
@@ -72,7 +68,7 @@ namespace MyBookShelf.ViewModel
             set
             {
                 _selectedImagePath = value;
-                OnPropertyChanged(); 
+                OnPropertyChanged();
             }
         }
 
@@ -140,7 +136,7 @@ namespace MyBookShelf.ViewModel
         {
             return await _creator.CreateBookAsync(
                 tbBookTitle ?? "New book",
-                _tbCountPage?? 0,
+                Int32.Parse(_tbCountPage ?? "0"),
                 _shelf.IdShelf,
                 tbBookAuthor ?? "No author",
                 BookDescription,
@@ -218,8 +214,6 @@ namespace MyBookShelf.ViewModel
 
             SelectedImagePath = string.IsNullOrEmpty(result.imagePath) ? string.Empty : result.imagePath;
         }
-
-
 
         /// <summary>
         /// Saves the selected image file to a local directory.

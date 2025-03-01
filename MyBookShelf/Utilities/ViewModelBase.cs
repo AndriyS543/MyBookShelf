@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Learning_Words.Utilities
+namespace MyBookShelf.Utilities
 {
     // Base class implementing INotifyPropertyChanged for MVVM pattern
     public class ViewModelBase : INotifyPropertyChanged

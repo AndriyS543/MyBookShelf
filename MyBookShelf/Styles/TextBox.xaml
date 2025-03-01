@@ -1,7 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <!-- Style for a TextBox used in shelves -->
     <Style x:Key="ShelfTextBoxStyle" TargetType="TextBox">
+        
         <Setter Property="Height" Value="44" />
         <Setter Property="Width" Value="500" />
         <Setter Property="FontSize" Value="24" />
@@ -14,19 +16,14 @@
         <Setter Property="Margin" Value="12,0,0,0" />
 
         <Style.Triggers>
-            <!-- При наведенні мишкою рамка стає золотою -->
+            <!-- When the mouse is over the TextBox, change the border color to gold -->
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="BorderBrush" Value="Gold"/>
             </Trigger>
-
-            <!-- Якщо користувач вводить текст, рамка стає сірою -->
+            <!-- When the TextBox is focused (user is typing), change the border color to gray -->
             <Trigger Property="IsKeyboardFocused" Value="True">
                 <Setter Property="BorderBrush" Value="Gray"/>
             </Trigger>
         </Style.Triggers>
-
     </Style>
-
-
-
 </ResourceDictionary>

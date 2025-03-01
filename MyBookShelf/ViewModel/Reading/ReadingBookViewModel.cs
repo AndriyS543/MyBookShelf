@@ -1,17 +1,12 @@
-﻿using Learning_Words.Utilities;
-using Microsoft.Win32;
-using MyBookShelf.Models;
+﻿using MyBookShelf.Models;
 using MyBookShelf.Repositories.BookGenreRroviders;
-using MyBookShelf.Repositories.BookRroviders;
 using MyBookShelf.Repositories.GenreRroviders;
 using MyBookShelf.Repositories.NoteProviders;
 using MyBookShelf.Repositories.ReadingSessionProviders;
-using MyBookShelf.Repositories.ShelfProviders;
 using MyBookShelf.Services;
 using MyBookShelf.Utilities;
 using MyBookShelf.View;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -21,9 +16,6 @@ namespace MyBookShelf.ViewModel
     public class ReadingBookViewModel : ViewModelBase
     {
         // Dependencies for data management
-        private readonly Shelf _shelf;
-        private readonly IBookGenreProviders _bookGenreProviders;
-        private readonly IGenreProviders _genreProviders;
         private readonly INoteProviders _noteProviders;
         private readonly ICreator _creator;
         private readonly Book _selectedBook;
@@ -44,6 +36,7 @@ namespace MyBookShelf.ViewModel
                 }
             }
         }
+
         private int? _pageStart;
         public string? tbPageStartText
         {
@@ -56,21 +49,20 @@ namespace MyBookShelf.ViewModel
                     _pageStart = null;
 
                 OnPropertyChanged();
- 
             }
         }
 
-        private string _notes ;
+        private string _notes = "";
         public string Notes
         {
             get => _notes;
-            set 
+            set
             {
-                if (_notes != value) 
+                if (_notes != value)
                 {
                     _notes = value;
-                    OnPropertyChanged();
-                }            
+                    OnPropertyChanged(); // Notify UI of changes
+                }
             }
         }
 
@@ -86,9 +78,9 @@ namespace MyBookShelf.ViewModel
                     _pageFinish = null;
 
                 OnPropertyChanged();
-
             }
         }
+
         private string? _tbBookAuthor;
         public string? tbBookAuthor
         {
@@ -98,7 +90,7 @@ namespace MyBookShelf.ViewModel
                 if (_tbBookAuthor != value)
                 {
                     _tbBookAuthor = value;
-                    OnPropertyChanged(); 
+                    OnPropertyChanged(); // Notify UI of changes
                 }
             }
         }
@@ -112,7 +104,7 @@ namespace MyBookShelf.ViewModel
                 if (_tbBookTitle != value)
                 {
                     _tbBookTitle = value;
-                    OnPropertyChanged(); 
+                    OnPropertyChanged(); // Notify UI of changes
                 }
             }
         }
@@ -124,97 +116,108 @@ namespace MyBookShelf.ViewModel
             set
             {
                 _imagePath = value;
-                OnPropertyChanged(); 
+                OnPropertyChanged(); // Notify UI of changes
             }
         }
+
+        // Collection of genres for selection
         public ObservableCollection<SelectableGenre> Genres { get; set; } = new ObservableCollection<SelectableGenre>();
+
+        // Command to commit reading session
         public ICommand CommitCommand { get; }
 
         // Constructor
-        public ReadingBookViewModel(Book selectedBook,ICreator creator,IReadingSessionProviders readingSessionProviders,INoteProviders noteProviders)
+        public ReadingBookViewModel(Book selectedBook, ICreator creator, IReadingSessionProviders readingSessionProviders, INoteProviders noteProviders)
         {
             _selectedBook = selectedBook;
             _creator = creator;
             _noteProviders = noteProviders;
             CommitCommand = new AsyncRelayCommand(CommitAsync);
 
+            // Initialize a timer to track reading duration
             _timer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromSeconds(1)
+                Interval = TimeSpan.FromSeconds(1) // Tick every second
             };
             _timer.Tick += Timer_Tick;
 
-            LoadData();
-            StartTimer();
+            LoadData(); // Load book details
+            StartTimer(); // Start tracking reading time
         }
 
-        
+        // Asynchronous method to commit reading session
         private async Task CommitAsync()
         {
-            if (_pageStart >= _pageFinish )
+            if (_pageStart >= _pageFinish)
             {
-                // Якщо кінцева сторінка не більша за початкову, вийти з методу
+                // If the finish page is not greater than the start page, exit
                 return;
             }
             if (_pageStart is null || _pageFinish is null)
             {
-                // Якщо обидві сторінки не задані, вийти з методу
+                // If both pages are null, exit
                 return;
             }
 
+            // Calculate reading completion percentage
             int finishPercent = 0;
             if (_selectedBook.CountPages > 0)
             {
-                finishPercent= (int)((double)(_pageFinish - _pageStart) / _selectedBook.CountPages * 100);
+                finishPercent = (int)((double)(_pageFinish - _pageStart) / _selectedBook.CountPages * 100);
             }
-            // Обчислення фінального відсотка
-            
 
-            // Створення сесії читання
-            var readingSession = await _creator.CreateReadingSessionAsync(_selectedBook.IdBook, _elapsedTime, _pageStart??0, _pageFinish??0, finishPercent);
+            // Create a new reading session
+            var readingSession = await _creator.CreateReadingSessionAsync(_selectedBook.IdBook, _elapsedTime, _pageStart ?? 0, _pageFinish ?? 0, finishPercent);
 
-            // Зупинка таймера
+            // Stop the timer
             StopTimer();
 
-            // Створення нотатки
-            if (!string.IsNullOrWhiteSpace(Notes)&& readingSession is not null)
+            // Create a note if there is any text and the session was created successfully
+            if (!string.IsNullOrWhiteSpace(Notes) && readingSession is not null)
             {
                 Note newNote = new Note
                 {
-                    IdReadingSession = readingSession.IdReadingSession, // Заміниться на реальний ID після створення сесії
+                    IdReadingSession = readingSession.IdReadingSession, // Will be replaced with real ID after session creation
                     Text = Notes
                 };
 
-                // Тут потрібно зберегти нотатку (якщо є відповідний метод у `ICreator`)
+                // Save the note using note provider
                 await _noteProviders.AddAsync(newNote);
             }
+
+            // Close the reading window
             var window = Application.Current.Windows.OfType<ReadingBook>().FirstOrDefault();
             window?.Close();
         }
 
+        // Property to display elapsed time in hh:mm:ss format
         public string ElapsedTime => _elapsedTime.ToString(@"hh\:mm\:ss");
 
-
+        // Timer tick event handler - increments elapsed time
         private void Timer_Tick(object? sender, EventArgs e)
         {
             _elapsedTime = _elapsedTime.Add(TimeSpan.FromSeconds(1));
-            OnPropertyChanged(nameof(ElapsedTime));
+            OnPropertyChanged(nameof(ElapsedTime)); // Notify UI of changes
         }
 
+        // Load book details into UI properties
         private void LoadData()
         {
-            tbBookTitle =_selectedBook.Title;
+            tbBookTitle = _selectedBook.Title;
             _imagePath = _selectedBook.PathImg;
             _tbBookAuthor = _selectedBook.Author;
             _tbCountPage = _selectedBook.CountPages.ToString();
         }
 
+        // Start the timer and reset elapsed time
         private void StartTimer()
         {
-            _elapsedTime = TimeSpan.Zero; // Скидаємо лічильник
+            _elapsedTime = TimeSpan.Zero; // Reset timer
             _timer.Start();
             OnPropertyChanged(nameof(ElapsedTime));
         }
+
+        // Stop the timer
         private void StopTimer()
         {
             _timer.Stop();

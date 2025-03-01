@@ -1,4 +1,4 @@
-﻿using Learning_Words.Utilities;
+﻿using MyBookShelf.Utilities;
 using MyBookShelf.Models;
 using MyBookShelf.Repositories.BookGenreRroviders;
 using MyBookShelf.Repositories.BookRroviders;
@@ -26,7 +26,7 @@ namespace MyBookShelf.ViewModel
         public ObservableCollection<Book> Books { get; } = new ObservableCollection<Book>();
         public ObservableCollection<Book> FilteredBooks { get; } = new ObservableCollection<Book>();
 
-        private Shelf _selectedShelf;
+        private Shelf _selectedShelf = new Shelf();
         public Shelf SelectedShelf
         {
             get => _selectedShelf;
@@ -42,7 +42,6 @@ namespace MyBookShelf.ViewModel
         }
 
         public ICommand TemplateClickCommand { get; }
-
         public ReadingMainViewModel(
             NavigationViewModel navigationViewModel,
             ICreator creator,
@@ -97,10 +96,10 @@ namespace MyBookShelf.ViewModel
             }
             catch (Exception ex)
             {
+                Console.Write(ex);
                 // Log or handle exception if needed
             }
         }
-
 
         /// <summary>
         /// Updates the filtered book collection based on the selected shelf.
@@ -140,10 +139,10 @@ namespace MyBookShelf.ViewModel
             }
             catch (Exception ex)
             {
+                Console.Write(ex);
                 // Log or handle exception if needed
             }
         }
-
 
         /// <summary>
         /// Handles book click events.
@@ -160,23 +159,9 @@ namespace MyBookShelf.ViewModel
             }
             catch (Exception ex)
             {
+                Console.Write(ex);
                 // Log or handle exception if needed
             }
-        }
-
-        /// <summary>
-        /// Opens the dialog for adding a new book.
-        /// </summary>
-        private void OpenAddNewBookDialog()
-        {
-            var viewModel = new AddNewBookViewModel(SelectedShelf, _creator, _bookGenreProviders, _genreProviders);
-            var addBookWindow = new AddNewBook
-            {
-                DataContext = viewModel,
-            };
-            addBookWindow.ShowDialog();
-
-            InitializeAsync(); // Refresh book list
         }
     }
 }
