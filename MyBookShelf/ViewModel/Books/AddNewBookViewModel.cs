@@ -19,17 +19,19 @@ namespace MyBookShelf.ViewModel
         private readonly ICreator _creator;
 
         // Properties for book details
-        private string? _tbCountPage;
+        private int? _tbCountPage;
         public string? tbCountPage
         {
-            get => _tbCountPage;
+            get => _tbCountPage.ToString() ?? string.Empty;
             set
             {
-                if (_tbCountPage != value)
-                {
-                    _tbCountPage = value;
-                    OnPropertyChanged(); // Notify UI of changes
-                }
+                if (int.TryParse(value, out int result))
+                    _tbCountPage = result;
+                else
+                    _tbCountPage = null;
+
+                OnPropertyChanged(); // Notify UI of changes
+                
             }
         }
 
@@ -136,7 +138,7 @@ namespace MyBookShelf.ViewModel
         {
             return await _creator.CreateBookAsync(
                 tbBookTitle ?? "New book",
-                Int32.Parse(_tbCountPage ?? "0"),
+                _tbCountPage ?? 0,
                 _shelf.IdShelf,
                 tbBookAuthor ?? "No author",
                 BookDescription,

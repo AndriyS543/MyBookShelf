@@ -25,7 +25,7 @@ namespace MyBookShelf.ViewModel
         public ObservableCollection<ReadingSession> ReadingSessions { get; } = new ObservableCollection<ReadingSession>();
 
         // Property for selected reading session
-        private ReadingSession? _selectedSession = new ReadingSession();
+        private ReadingSession? _selectedSession;
         public ReadingSession? SelectedSession
         {
             get => _selectedSession;

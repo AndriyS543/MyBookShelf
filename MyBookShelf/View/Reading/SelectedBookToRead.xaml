@@ -93,7 +93,7 @@
                                FontSize="60" 
                                Height="312" 
                                Width="210"                    
-                               Text="1"
+                               Text="Empty"
                                Visibility="{Binding imagePath, Converter={StaticResource NullToVisibilityConverter}}"/>
                 </Button>
 
