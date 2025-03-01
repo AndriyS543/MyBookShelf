@@ -18,7 +18,7 @@ namespace MyBookShelf.DBContext.EntityConfigurations
             builder.HasOne(bg => bg.Genre)
                    .WithMany(g => g.BookGenres) 
                    .HasForeignKey(bg => bg.IdGenre)
-                   .OnDelete(DeleteBehavior.Restrict)
+                   .OnDelete(DeleteBehavior.Cascade)
                    .IsRequired();
         }
     }

@@ -17,7 +17,7 @@ namespace MyBookShelf.DBContext.EntityConfigurations
             builder.HasOne(rs => rs.Book)
                         .WithMany(b => b.ReadingSessions)
                         .HasForeignKey(rs => rs.IdBook)
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
