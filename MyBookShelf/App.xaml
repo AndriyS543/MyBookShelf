@@ -1,7 +1,8 @@
 ﻿<Application x:Class="MyBookShelf.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:MyBookShelf">
+             xmlns:local="clr-namespace:MyBookShelf"
+             xmlns:converters="clr-namespace:MyBookShelf.Converters">
     <Application.Resources>
         <ResourceDictionary>
 
@@ -9,7 +10,19 @@
                 <ResourceDictionary Source="Styles/Button.xaml" />
                 <ResourceDictionary Source="Styles/Image.xaml" />
                 <ResourceDictionary Source="Styles/Text.xaml" />
+                <ResourceDictionary Source="Styles/ComboBox.xaml" />
+                <ResourceDictionary Source="Styles/TextBox.xaml" />
+                <ResourceDictionary Source="Styles/DataGrid.xaml" />
+                <ResourceDictionary Source="Utilities/DataTemplate.xaml" />
+                <ResourceDictionary Source="Styles/Colors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:NullToVisibilityConverter  x:Key="NullToVisibilityConverter"/>
+            <converters:NullToImageSourceConverter x:Key="NullToImageConverter"/>
+            <converters:BoolToTextDecorationConverter x:Key="BoolToTextDecorationConverter"/>
+            <converters:BoolToTextColorConverter x:Key="BoolToTextColorConverter"/>
+            <converters:RowNumberConverter x:Key="RowNumberConverter"/>
+            <converters:InvertedBoolToVisibilityConverter x:Key="InvertedBoolToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

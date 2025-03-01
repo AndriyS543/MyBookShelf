@@ -43,9 +43,13 @@ namespace MyBookShelf.Repositories.BookRroviders
         {
             using (var context = _dbContextFactory.CreateDbContext())
             {
-                return await context.Books.FindAsync(id);
+                return await context.Books
+                    .Include(b => b.BookGenres) // Завантажуємо зв'язки книг і жанрів
+                    .ThenInclude(bg => bg.Genre) // Завантажуємо самі жанри
+                    .FirstOrDefaultAsync(b => b.IdBook == id); // Пошук книги по ID
             }
         }
+
 
         public async Task<bool> UpdateAsync(Book entity)
         {

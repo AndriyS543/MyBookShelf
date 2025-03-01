@@ -1,0 +1,41 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:MyBookShelf.ViewModel"
+                    xmlns:view="clr-namespace:MyBookShelf.View">
+
+    <DataTemplate DataType="{x:Type vm:BooksMainViewModel}">
+        <view:BooksMain />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ShelvesViewModel}">
+        <view:Shelves />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ReadingMainViewModel}">
+        <view:ReadingMain />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:AddNewBookViewModel}">
+        <view:AddNewBook />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:SelectedBookViewModel}">
+        <view:SelectedBook />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ManageBookGenreViewModel}">
+        <view:ManageBookGenre />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:SelectedBookToReadViewModel}">
+        <view:SelectedBookToRead />
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type vm:ReadingBookViewModel}">
+        <view:ReadingBook />
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type vm:InfoViewModel}">
+        <view:Info />
+    </DataTemplate>
+</ResourceDictionary>

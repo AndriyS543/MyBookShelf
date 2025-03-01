@@ -9,15 +9,17 @@ namespace MyBookShelf.DBContext.EntityConfigurations
         public void Configure(EntityTypeBuilder<BookGenre> builder)
         {
             builder.HasKey(bg => bg.IdBookGenre);
+            builder.Property(b => b.IdBookGenre).ValueGeneratedOnAdd();
             builder.HasOne(bg => bg.Book)
                     .WithMany(b => b.BookGenres)
                     .HasForeignKey(bg => bg.IdBook)
-                    .OnDelete(DeleteBehavior.Restrict);
-
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
             builder.HasOne(bg => bg.Genre)
                    .WithMany(g => g.BookGenres) 
                    .HasForeignKey(bg => bg.IdGenre)
-                   .OnDelete(DeleteBehavior.Restrict);
+                   .OnDelete(DeleteBehavior.Cascade)
+                   .IsRequired();
         }
     }
 

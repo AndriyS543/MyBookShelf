@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyBookShelf.DBContext;
 
@@ -16,51 +15,44 @@ namespace MyBookShelf.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
 
             modelBuilder.Entity("MyBookShelf.Models.Book", b =>
                 {
                     b.Property<int>("IdBook")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdBook"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Author")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("CountPages")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(700)
-                        .HasColumnType("nvarchar(700)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("IdShelf")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PathImg")
-                        .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("PublicationDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Rating")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("IdBook");
 
@@ -73,15 +65,13 @@ namespace MyBookShelf.Migrations
                 {
                     b.Property<int>("IdBookGenre")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdBookGenre"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("IdBook")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("IdGenre")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("IdBookGenre");
 
@@ -96,16 +86,17 @@ namespace MyBookShelf.Migrations
                 {
                     b.Property<int>("IdGenre")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdGenre"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("IdGenre");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Genres");
                 });
@@ -114,17 +105,15 @@ namespace MyBookShelf.Migrations
                 {
                     b.Property<int>("IdNote")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdNote"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("IdReadingSession")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasMaxLength(700)
-                        .HasColumnType("nvarchar(700)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("IdNote");
 
@@ -137,27 +126,22 @@ namespace MyBookShelf.Migrations
                 {
                     b.Property<int>("IdReadingSession")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdReadingSession"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("FinishPage")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("FinishPercent")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FinishTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("IdBook")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
+
+                    b.Property<TimeSpan>("ReadingTime")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("StartPage")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("IdReadingSession");
 
@@ -170,19 +154,17 @@ namespace MyBookShelf.Migrations
                 {
                     b.Property<int>("IdShelf")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdShelf"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(700)
-                        .HasColumnType("nvarchar(700)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("IdShelf");
 
@@ -194,7 +176,7 @@ namespace MyBookShelf.Migrations
                     b.HasOne("MyBookShelf.Models.Shelf", "Shelf")
                         .WithMany("Books")
                         .HasForeignKey("IdShelf")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Shelf");
@@ -205,13 +187,13 @@ namespace MyBookShelf.Migrations
                     b.HasOne("MyBookShelf.Models.Book", "Book")
                         .WithMany("BookGenres")
                         .HasForeignKey("IdBook")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MyBookShelf.Models.Genre", "Genre")
                         .WithMany("BookGenres")
                         .HasForeignKey("IdGenre")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");
@@ -224,7 +206,7 @@ namespace MyBookShelf.Migrations
                     b.HasOne("MyBookShelf.Models.ReadingSession", "ReadingSession")
                         .WithMany("Notes")
                         .HasForeignKey("IdReadingSession")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ReadingSession");
@@ -235,7 +217,7 @@ namespace MyBookShelf.Migrations
                     b.HasOne("MyBookShelf.Models.Book", "Book")
                         .WithMany("ReadingSessions")
                         .HasForeignKey("IdBook")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");

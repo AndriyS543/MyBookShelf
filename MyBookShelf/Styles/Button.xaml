@@ -1,84 +1,82 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Style x:Key="BtnStyle"
-           TargetType="RadioButton">
+    <!-- Style for a RadioButton -->
+    <Style x:Key="BtnStyle" TargetType="RadioButton">
 
-        <Setter Property="HorizontalAlignment"
-                Value="Left" />
-        <Setter Property="VerticalAlignment"
-                Value="Top" />
-        <Setter Property="Margin"
-                Value="12,27,12,0" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Margin" Value="12,27,12,0" />
         
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
                     <Border x:Name="border" 
-                        Height="43" 
-                        Width="175" 
-                        CornerRadius="10"
-                        Padding="0 0 0 0">
+                            Height="43" 
+                            Width="175" 
+                            CornerRadius="10"
+                            Padding="0 0 0 0">
+
                         <Border.Background>
                             <SolidColorBrush x:Name="BorderBackground" Color="Transparent" />
                         </Border.Background>
+
                         <Grid>
                             <ContentPresenter />
                         </Grid>
                     </Border>
-                    
+
                     <ControlTemplate.Triggers>
+                        <!-- Change border on mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="BorderBrush" TargetName="border" Value="White" />
                             <Setter Property="BorderThickness" TargetName="border" Value="1"/>
                         </Trigger>
+                        <!-- Change background when selected -->
                         <Trigger Property="IsChecked" Value="True">
                             <Setter Property="Background" TargetName="border" Value="#3D2012" />
                         </Trigger>
+
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
     </Style>
 
-  
-    <Style x:Key="ExitApp"
-           TargetType="{x:Type Button}">
+    <!-- Style for Exit Button -->
+    <Style x:Key="ExitApp" TargetType="{x:Type Button}">
 
-        <Setter Property="Height"
-                Value="40" />
-        <Setter Property="Width"
-                Value="40" />
-        <Setter Property="HorizontalAlignment"
-                Value="Right" />
-        <Setter Property="VerticalAlignment"
-                Value="Top" />
-        <Setter Property="Margin"
-                Value="2,0,0,0" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Width" Value="40" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Margin" Value="2,0,0,0" />
         <Setter Property="Background" Value="#C7B1A7" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
+        
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="border" 
-                        Background="{TemplateBinding Background}" 
-                        BorderBrush="{TemplateBinding BorderBrush}" 
-                        BorderThickness="{TemplateBinding BorderThickness}" 
-                        Height="40" 
-                        Width="40" >
+                            Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Height="40" 
+                            Width="40">
+
                         <Grid>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
 
                     <ControlTemplate.Triggers>
+                        <!-- Change border on mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="BorderBrush" TargetName="border" Value="White" />
                             <Setter Property="BorderThickness" TargetName="border" Value="2"/>
                         </Trigger>
-
+                        <!-- Change background when pressed -->
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Background" TargetName="border" Value="#705448"/>
                         </Trigger>
@@ -88,4 +86,175 @@
         </Setter>
     </Style>
 
+    <!-- Style for Book Button -->
+    <Style x:Key="BookButtonStyle" TargetType="Button">
+        
+        <Setter Property="Width" Value="124"/>
+        <Setter Property="Height" Value="184"/>
+        <Setter Property="BorderBrush" Value="White"/>
+        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="Background" Value="#705448"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="Foreground" Value="#C7B1A7"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="10">
+                        
+                        <ContentPresenter HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Style for Shelf Button -->
+    <Style x:Key="ShelfButton" TargetType="{x:Type Button}">
+
+        <Setter Property="Height" Value="44" />
+        <Setter Property="Width" Value="256" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Margin" Value="2,0,0,0" />
+        <Setter Property="Background" Value="#C7B1A7" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontFamily" Value="Josefin Sans"/>
+        <Setter Property="Foreground" Value="#3D2012" />
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                            BorderThickness="1" 
+                                            CornerRadius="10"> 
+                        
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    
+                    <ControlTemplate.Triggers>
+                        <!-- Change border on mouse hover -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" TargetName="border" Value="White" />
+                            <Setter Property="BorderThickness" TargetName="border" Value="2"/>
+                        </Trigger>
+                        <!-- Change background when pressed -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="border" Value="#705448"/>
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Back button style -->
+    <Style x:Key="BackButtonStyle" TargetType="Button">
+        
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="12 0 0 12"/>
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <!-- Button appearance using a Border and an Image -->
+                    <Border x:Name="border" Background="{TemplateBinding Background}"  CornerRadius="20">
+                        <Image Source="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" Width="30" Height="30"/>
+                    </Border>
+                    
+                    <!-- Define triggers for visual feedback -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" TargetName="border" Value="0.7"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Opacity" TargetName="border" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Rating button style -->
+    <Style x:Key="RatingButtonStyle" TargetType="Button">
+        
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="#C7B1A7"/>
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="FontSize" Value="27"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="0 0 0 9"/>
+        <Setter Property="Padding" Value="0 0 0 9"/>
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    
+                    <Border x:Name="border" Background="{TemplateBinding Background}"  CornerRadius="20">
+                        <Grid>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Define triggers for visual feedback -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" TargetName="border" Value="0.7"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Opacity" TargetName="border" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Genre button style -->
+    <Style x:Key="GenreButtonStyle" TargetType="Button">
+        
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontSize" Value="15"/>
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    
+                    <Border x:Name="border" Background="{TemplateBinding Background}">
+                        <Grid>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <!-- Define triggers for visual feedback -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" TargetName="border" Value="0.7"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Opacity" TargetName="border" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

@@ -1,0 +1,171 @@
+﻿<Window x:Class="MyBookShelf.View.ReadingBook"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Width="732"
+        Height="525"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="#705448">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Info book -->
+        <Border Grid.Row="0" Margin="76 28 0 0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Button to select an FB2 file with an image preview -->
+                <Button  Style="{StaticResource BookButtonStyle}"
+                         Height="175" 
+                         Width="118" 
+                         Margin="0 0 0 10"
+                         VerticalAlignment="Top">
+                    <Button.Background>
+                        <ImageBrush ImageSource="{Binding imagePath, Converter={StaticResource NullToImageConverter}}" Stretch="UniformToFill"/>
+                    </Button.Background>
+                    
+                    <TextBlock TextAlignment="Center" 
+                               Padding="0 20 0 0" 
+                               Background="#C7B1A7" 
+                               Foreground="#705448" 
+                               FontSize="60" 
+                               Height="175" 
+                               Width="118" 
+                               Visibility="{Binding imagePath, Converter={StaticResource NullToVisibilityConverter}}"/>
+                </Button>
+
+                <!-- Book information section -->
+                <StackPanel Grid.Column="1" Margin="10 4 0 0">
+
+                    <!-- Title input -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0" Height="32">
+                        <TextBlock Text="Title:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
+                        <TextBox Text="{Binding tbBookTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource ShelfTextBoxStyle}" 
+                                 VerticalAlignment="Center" 
+                                 Foreground="#3D2012"
+                                 Margin="11,0,0,0"
+                                 IsReadOnly="True" 
+                                 Height="28" Width="452"/>
+
+                    </StackPanel>
+
+                    <!-- Author input -->
+                    <StackPanel Orientation="Horizontal" Margin="0,17,0,0" Height="32">
+                        <TextBlock Text="Author:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
+                        <TextBox Text="{Binding tbBookAuthor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource ShelfTextBoxStyle}"
+                                 Foreground="#3D2012"
+                                 VerticalAlignment="Center"
+                                 IsReadOnly="True" 
+                                 Margin="11,0,0,0" Height="28" Width="417"/>
+                    </StackPanel>
+
+                    <!-- Page count input -->
+                    <StackPanel Orientation="Horizontal" Margin="0,17,0,17" Height="32">
+                        <TextBlock Text="Page:" Style="{StaticResource TextSelectedBookMainStyle}" FontSize="30"/>
+                        <TextBox Text="{Binding tbCountPage, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, NotifyOnValidationError=True}"
+                                 Style="{StaticResource ShelfTextBoxStyle}" 
+                                 VerticalAlignment="Center"
+                                 Foreground="#3D2012"
+                                 IsReadOnly="True" 
+                                 Margin="11,0,0,0" Height="34" Width="444"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Timer -->
+        <Border Grid.Row="1" Margin="0 4 0 0">
+            <Grid>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,2" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding ElapsedTime}" Foreground="#3D2012" Style="{StaticResource TextSelectedBookMainStyle}" TextDecorations="None" FontSize="30" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Select Pages -->
+        <Border Grid.Row="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!-- Page Start -->
+                <StackPanel  Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="80,9,0,0" Height="34">
+                    <TextBlock Text="Page Start" Style="{StaticResource TextSelectedBookMainStyle}" TextDecorations="None"  FontSize="25" Height="34"/>
+                    <TextBox Text="{Binding tbPageStartText, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, NotifyOnValidationError=True}"
+                             Style="{StaticResource ShelfTextBoxStyle}"
+                             VerticalAlignment="Center"  
+                             Foreground="#3D2012"
+                             Height="34"
+                             FontSize="25"
+                             Margin="11,0,0,0" Width="88"
+                             BorderThickness="2"
+                             BorderBrush="#3D2012"/>
+                </StackPanel>
+
+                <!-- End Start -->
+                <StackPanel  Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top"  HorizontalAlignment="Center" Margin="0,9,0,9" Height="34">
+                    <TextBlock Text="Page End:" Style="{StaticResource TextSelectedBookMainStyle}" TextDecorations="None" FontSize="25" Height="34"/>
+                    <TextBox Text="{Binding tbPageFinishText, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, NotifyOnValidationError=True}"
+                             Style="{StaticResource ShelfTextBoxStyle}"
+                             Height="34"
+                             FontSize="25"
+                             Foreground="#3D2012"
+                             VerticalAlignment="Center"
+                             Margin="11,0,0,0" Width="88"
+                             BorderThickness="2"
+                             BorderBrush="#3D2012"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Notes -->
+        <Border Grid.Row="3" BorderBrush="#3D2012" BorderThickness="2"  Width="572">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top"   Margin="0,9,0,0">
+                <TextBlock Text="Notes" Style="{StaticResource TextSelectedBookMainStyle}" HorizontalAlignment="Center"  TextDecorations="None"  FontSize="23"/>
+                <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="#3D2012"
+                         Style="{StaticResource ShelfTextBoxStyle}"
+                         Padding="0,1,0,0"
+                         Margin="0 0 0 0" 
+                         Width="563"  
+                         Height="125"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         MaxLength="700"
+                         VerticalScrollBarVisibility="Hidden"/>
+            </StackPanel>
+        </Border>
+        <!-- Buttons section -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,10" >
+            <Button Content="✔️" 
+                    Width="102" 
+                    Height="44" 
+                    Style="{StaticResource ShelfButton}" 
+                    Margin="0,0,24,0" 
+                    Command="{Binding CommitCommand}"/> 
+
+            <Button Content="✖️" 
+                    Width="102" 
+                    Height="44" 
+                    Style="{StaticResource ShelfButton}" 
+                    Click="Button_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

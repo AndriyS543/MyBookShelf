@@ -13,8 +13,7 @@
         Background="Transparent">
     <Grid>
         <!--// Window Border //-->
-        <Border Background="#3D2012"
-            CornerRadius="20"/>
+        <Border Background="#3D2012" CornerRadius="20"/>
         <Grid>
 
             <Grid.ColumnDefinitions>
@@ -23,47 +22,78 @@
             </Grid.ColumnDefinitions>
 
             <!-- Navigation Panel -->
-            <Border CornerRadius="20" Background="#705448" 
+            <Border CornerRadius="20" 
+                    Background="#705448" 
                     Width="200" Height="597" 
                     VerticalAlignment="Center" 
                     HorizontalAlignment="Left"
                     Margin="20">
-                <StackPanel Orientation="Vertical">
-                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="True">
-                        <Grid>
-                            <Image Source="Images/img_books.png" Style="{StaticResource Image_Style}" />
-                            <TextBlock Text="Books" Style="{StaticResource Text_Style}" />
-                        </Grid>
-                    </Menu:Btn>
 
-                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="False">
-                        <Grid>
-                            <Image Source="Images/img_shelves.png" Style="{StaticResource Image_Style}" />
-                            <TextBlock Text="Shelves" Style="{StaticResource Text_Style}" />
-                        </Grid>
-                    </Menu:Btn>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                    <Menu:Btn Style="{StaticResource BtnStyle}" IsChecked="False">
-                        <Grid>
-                            <Image Source="Images/img_reading.png" Style="{StaticResource Image_Style}" />
-                            <TextBlock Text="Reading" Style="{StaticResource Text_Style}" />
-                        </Grid>
-                    </Menu:Btn>
-                </StackPanel>
+                    <!-- Navigation buttons -->
+                    <StackPanel Orientation="Vertical" Grid.Row="0">
+                        <Menu:Btn Style="{StaticResource BtnStyle}" 
+                                  IsChecked="{Binding IsBooksChecked, Mode=OneWay}"
+                                  Command="{Binding BooksCommand}">
+                            <Grid>
+                                <Image Source="Images/img_books.png" Style="{StaticResource Image_Style}" />
+                                <TextBlock Text="Books" Style="{StaticResource Text_Style}" />
+                            </Grid>
+                        </Menu:Btn>
+
+                        <Menu:Btn Style="{StaticResource BtnStyle}" 
+                                  IsChecked="{Binding IsShelvesChecked, Mode=OneWay}"
+                                  Command="{Binding ShelvesCommand}">
+                            <Grid>
+                                <Image Source="Images/img_shelves.png" Style="{StaticResource Image_Style}" />
+                                <TextBlock Text="Shelves" Style="{StaticResource Text_Style}" />
+                            </Grid>
+                        </Menu:Btn>
+
+                        <Menu:Btn Style="{StaticResource BtnStyle}" 
+                                  IsChecked="{Binding IsReadingChecked, Mode=OneWay}"
+                                  Command="{Binding ReadingCommand}">
+                            <Grid>
+                                <Image Source="Images/img_reading.png" Style="{StaticResource Image_Style}" />
+                                <TextBlock Text="Reading" Style="{StaticResource Text_Style}" />
+                            </Grid>
+                        </Menu:Btn>
+                        <Menu:Btn Style="{StaticResource BtnStyle}" 
+                                  IsChecked="{Binding IsInfoChecked, Mode=OneWay}"
+                                  Command="{Binding InfoCommand}">
+                            <Grid>
+                                <Image Source="Images/img_info.png" Style="{StaticResource Image_Style}" />
+                                <TextBlock Text="Info" Style="{StaticResource Text_Style}" />
+                            </Grid>
+                        </Menu:Btn>
+                    </StackPanel>
+
+
+                    <StackPanel Grid.Row="1"/>
+                    <Button Grid.Row="2" 
+                            Command="{Binding GoBackCommand}"
+                            Visibility="{Binding CanGoBack, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Content="pack://application:,,,/Images/img_back.png"
+                            Style="{StaticResource BackButtonStyle}"/>
+                </Grid>
             </Border>
-
 
             <!-- Current Page -->
             <Grid Grid.Row="0" Grid.Column="1"
-              VerticalAlignment="Bottom"
-              HorizontalAlignment="Center"
-              Height="617"
-              Width="991">
-                <ContentControl x:Name="Pages"
-                            Content="{Binding CurrentView}" />
+                  VerticalAlignment="Bottom"
+                  HorizontalAlignment="Center"
+                  Height="617"
+                  Width="991">
+                <ContentControl x:Name="Pages" Content="{Binding CurrentView}" />
             </Grid>
         </Grid>
-        
+
         <Grid VerticalAlignment="Top" HorizontalAlignment="Right">
             <StackPanel Orientation="Horizontal">
                 <Button Style="{StaticResource ExitApp}" Click="MinimizeApp_Click">
@@ -79,9 +109,5 @@
                 </Button>
             </StackPanel>
         </Grid>
-
-
     </Grid>
-
-
 </Window>

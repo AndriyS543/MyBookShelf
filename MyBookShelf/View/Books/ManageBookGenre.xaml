@@ -1,0 +1,69 @@
+﻿<Window x:Class="MyBookShelf.View.ManageBookGenre"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Width="391"
+        Height="342"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+    <Grid>
+        <!-- Main border with rounded corners -->
+        <Border Background="#705448" CornerRadius="20">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                <!-- Title text for the genre selection window -->
+                <TextBlock Text="Genre" 
+                           Style="{StaticResource TextShelvesMainStyle}" 
+                           Foreground="#B0C2DB"  
+                           HorizontalAlignment="Center"/>
+
+                <!-- Genre selection area -->
+                <WrapPanel Orientation="Horizontal" Width="388" Height="200">
+                    <ItemsControl ItemsSource="{Binding Genres}">
+
+                        <!-- Defines the layout for the items -->
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <!-- Template for displaying genre buttons -->
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding DataContext.ToggleGenreSelectionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}"
+                                        Padding="5"
+                                        Margin="5 10 5 5"
+                                        Cursor="Hand"
+                                        BorderBrush="Black"
+                                        Style="{StaticResource GenreButtonStyle}">
+
+                                    <!-- Genre name display with conditional styling -->
+                                    <TextBlock Text="{Binding Genre.Name}"
+                                               Foreground="{Binding IsSelected, Converter={StaticResource BoolToTextColorConverter}}"
+                                               TextDecorations="{Binding IsSelected, Converter={StaticResource BoolToTextDecorationConverter}}"/>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </WrapPanel>
+
+                <!-- Action buttons section -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                    <!-- Confirm button -->
+                    <Button Content="✔️" Width="124" Style="{StaticResource ShelfButton}" Command="{Binding CommitCommand}"  />
+
+                    <!-- Cancel button -->
+                    <Button Content="✖️" Width="124" Margin="44 0 0 0" Style="{StaticResource ShelfButton}" Click="CloseApp_Click"  />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+    
+</Window>

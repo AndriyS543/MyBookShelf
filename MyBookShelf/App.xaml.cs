@@ -7,11 +7,14 @@ using MyBookShelf.Repositories.BookGenreRroviders;
 using MyBookShelf.Repositories.NoteProviders;
 using MyBookShelf.Repositories.ReadingSessionProviders;
 using MyBookShelf.Repositories.ShelfProviders;
+using MyBookShelf.ViewModel;
+using MyBookShelf.Services;
+using MyBookShelf.DatabaseInitializer;
 namespace MyBookShelf
 {
     public partial class App : Application
     {
-        private const string CONNECTION_ST = "connection";
+        private const string CONNECTION_ST = "Data Source=myBookShelf.db";
         private readonly BookShelfDbContextFactory _bookShelfDbContextFactory;
         private readonly IBookProviders _bookProviders;
         private readonly IGenreProviders _genreProviders;
@@ -19,6 +22,8 @@ namespace MyBookShelf
         private readonly INoteProviders _noteProviders;
         private readonly IReadingSessionProviders _readingSessionProvider;
         private readonly IShelfProviders _shelfProvider;
+
+        private readonly ICreator _creator;
         public App()
         {
             _bookShelfDbContextFactory = new BookShelfDbContextFactory(CONNECTION_ST);
@@ -28,18 +33,24 @@ namespace MyBookShelf
             _noteProviders = new DatabaseNoteProviders(_bookShelfDbContextFactory);
             _readingSessionProvider = new DatabaseReadingSessionProviders(_bookShelfDbContextFactory);
             _shelfProvider = new DatabaseShelfProviders(_bookShelfDbContextFactory);
+            _creator = new Creator(_shelfProvider,_bookProviders, _readingSessionProvider);
         }
 
         protected async override void OnStartup(StartupEventArgs e)
         {
-           /* using (BookShelfDBContext dbContext = _bookShelfDbContextFactory.CreateDbContext())
+           using (BookShelfDBContext dbContext = _bookShelfDbContextFactory.CreateDbContext())
             {
 
                 dbContext.Database.Migrate();
+                await DbInitializer.InitializeGenres(_genreProviders);
 
-            }*/
+            }
 
-            MainWindow = new MainWindow();
+            var navigationViewModel = new NavigationViewModel(_creator,_shelfProvider,_bookProviders,_bookGenreProviders,_genreProviders,_readingSessionProvider, _noteProviders);
+            MainWindow = new MainWindow 
+            {
+               DataContext = navigationViewModel
+            };
             MainWindow.Show();
             base.OnStartup(e);
         }

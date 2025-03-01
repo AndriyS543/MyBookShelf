@@ -6,7 +6,7 @@ namespace MyBookShelf.DBContext
 {
     public class BookShelfDBContext : DbContext
     {
-        public BookShelfDBContext(DbContextOptions<BookShelfDBContext> options) : base(options)
+        public BookShelfDBContext(DbContextOptions options) : base(options)
         {
         }
 

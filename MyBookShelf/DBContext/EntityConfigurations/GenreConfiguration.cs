@@ -9,7 +9,9 @@ namespace MyBookShelf.DBContext.EntityConfigurations
         public void Configure(EntityTypeBuilder<Genre> builder)
         {
             builder.HasKey(g => g.IdGenre);
+            builder.Property(s => s.IdGenre).ValueGeneratedOnAdd();
             builder.Property(g => g.Name).HasMaxLength(255).IsRequired();
+            builder.HasIndex(g => g.Name).IsUnique();
         }
     }
 

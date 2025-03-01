@@ -1,0 +1,133 @@
+﻿<UserControl x:Class="MyBookShelf.View.SelectedBookToRead"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression.blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="617"
+             d:DesignWidth="991">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <!-- Main content area -->
+            <ColumnDefinition Width="*"/>
+            <!-- Sidebar area (for cover image and controls) -->
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Section: Book Information & Reading Sessions -->
+        <Border Grid.Column="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <!-- Book title -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- DataGrid (Reading sessions) -->
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Book Title -->
+                <TextBlock Grid.Row="0"
+                           Text="{Binding tbBookTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                           FontSize="36" 
+                           Foreground="#B0C2DB"
+                           HorizontalAlignment="Left"
+                           Margin="29,0"
+                           FontFamily="Josefin Sans"/>
+
+                <!-- Reading Sessions Table -->
+                <DataGrid Grid.Row="1"
+                      FontSize="32"
+                      Foreground="#C7B1A7"
+                      Background="Transparent"
+                      ItemsSource="{Binding ReadingSessions}"
+                      SelectedItem="{Binding SelectedSession}"
+                      Style="{StaticResource DataGridStyle}"
+                      AlternationCount="1000">
+
+                    <DataGrid.Columns>
+                        <!-- Row Number Column -->
+                        <DataGridTextColumn Header="№" IsReadOnly="True" Width="*">
+                            <DataGridTextColumn.Binding>
+                                <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}" 
+                                         Path="AlternationIndex"
+                                         Converter="{StaticResource RowNumberConverter}"/>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <!-- Page Count Column -->
+                        <DataGridTextColumn Header="Count page" IsReadOnly="True" Binding="{Binding FinishPage}" Width="*"/>
+                        <!-- Reading Time Column -->
+                        <DataGridTextColumn Header="Time" IsReadOnly="True" Binding="{Binding ReadingTime}" Width="*"/>
+                        <!-- Reading Completion Percentage Column -->
+                        <DataGridTextColumn Header="Percent" IsReadOnly="True" Binding="{Binding FinishPercent}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+        <!-- Right Section: Book Cover & Controls -->
+        <Border Grid.Column="1" Margin="15 15 15 0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <!-- Book Cover -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Reading Progress -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Control Buttons -->
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Book Cover Image -->
+                <Button Style="{StaticResource BookButtonStyle}"
+                        Height="312" 
+                        Width="210">
+
+                    <Button.Background>
+                        <ImageBrush ImageSource="{Binding imagePath, Converter={StaticResource NullToImageConverter}}" Stretch="UniformToFill"/>
+                    </Button.Background>
+
+                    <!-- Placeholder number "1" if no cover image is available -->
+                    <TextBlock TextAlignment="Center" 
+                               Padding="0 90 0 0" 
+                               Background="#C7B1A7" 
+                               Foreground="#705448" 
+                               FontSize="60" 
+                               Height="312" 
+                               Width="210"                    
+                               Text="Empty"
+                               Visibility="{Binding imagePath, Converter={StaticResource NullToVisibilityConverter}}"/>
+                </Button>
+
+                <!-- Reading Progress Percentage -->
+                <TextBlock Grid.Row="1" 
+                           Text="{Binding TotalFinishPercent}"
+                           FontSize="64"
+                           Foreground="#705448"
+                           FontWeight="Bold"
+                           FontFamily="Josefin Sans"
+                           HorizontalAlignment="Center"
+                           Margin="0, 18, 0, 20"/>
+
+
+                <!-- Action Buttons -->
+                <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center">
+                    <!-- Start Reading Button -->
+                    <Button Content="Start reading"
+                            Style="{StaticResource ShelfButton}"
+                            Height="44"
+                            Width="210"
+                            Command="{Binding StartReadingCommand}"
+                            Margin="0,0,0,10"/>
+
+                    <!-- Delete Row Button -->
+                    <Button Content="Delete Row"
+                            Style="{StaticResource ShelfButton}"
+                            Height="44"
+                            Width="210"
+                            Command="{Binding DeleteSessionCommand}"/>
+                </StackPanel>
+
+            </Grid>
+        </Border>
+
+    </Grid>
+</UserControl>

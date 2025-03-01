@@ -54,5 +54,22 @@ namespace MyBookShelf.Repositories.NoteProviders
                 return await context.SaveChangesAsync() > 0;
             }
         }
+
+        public async Task<IEnumerable<Note>> GetNotesByBookIdAsync(int bookId)
+        {
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                var readingSessions = await context.ReadingSessions
+                    .Where(rs => rs.IdBook == bookId)
+                    .Include(rs => rs.Notes)
+                    .ToListAsync();
+
+                var notes = readingSessions
+                    .SelectMany(rs => rs.Notes)
+                    .ToList();
+
+                return notes;
+            }
+        }
     }
 }
